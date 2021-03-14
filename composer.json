@@ -1,0 +1,24 @@
+{
+  "name": "hologfx/mangadex",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "symfony/var-dumper": "^4.1",
+    "maximebf/debugbar": "^1.15",
+    "enygma/gauth": "^0.4.0",
+    "sentry/sentry": "^1.10",
+    "symfony/event-dispatcher": "^4.1",
+    "symfony/http-foundation": "^4.1",
+    "symfony/http-kernel": "^4.1",
+    "ramsey/uuid": "^3.8",
+    "whichbrowser/parser": "^2.0",
+    "geoip2/geoip2": "~2.0",
+    "guzzlehttp/guzzle": "^6.5",
+    "google/apiclient": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mangadex\\": "src/"
+    }
+  }
+}

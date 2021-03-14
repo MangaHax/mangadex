@@ -1,0 +1,665 @@
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	font-size: 0.875rem;
+	margin-bottom: 50px;
+	padding-top: 70px;
+	padding-bottom: 30px;
+	font-family: "Ubuntu", sans-serif;
+}
+
+.flag{display:inline-block;background:url(/images/flags-flat-24.png) no-repeat;background-size:100%;width:24px;min-width:24px;height:24px;vertical-align:bottom;opacity:0.75;}
+
+.flag-_unknown{background-position:0 -0px}.flag-bd{background-position:0 -24px}.flag-bg{background-position:0 -48px}.flag-br{background-position:0 -72px}.flag-cn{background-position:0 -96px}.flag-ct{background-position:0 -120px}.flag-cz{background-position:0 -144px}.flag-de{background-position:0 -168px}.flag-dk{background-position:0 -192px}.flag-es{background-position:0 -216px}.flag-fi{background-position:0 -240px}.flag-fr{background-position:0 -264px}.flag-gb{background-position:0 -288px}.flag-gr{background-position:0 -312px}.flag-hk{background-position:0 -336px}.flag-hu{background-position:0 -360px}.flag-id{background-position:0 -384px}.flag-il{background-position:0 -408px}.flag-in{background-position:0 -432px}.flag-ir{background-position:0 -456px}.flag-it{background-position:0 -480px}.flag-jp{background-position:0 -504px}.flag-kr{background-position:0 -528px}.flag-lt{background-position:0 -552px}.flag-mm{background-position:0 -576px}.flag-mn{background-position:0 -600px}.flag-mx{background-position:0 -624px}.flag-my{background-position:0 -648px}.flag-nl{background-position:0 -672px}.flag-no{background-position:0 -696px}.flag-ph{background-position:0 -720px}.flag-pl{background-position:0 -744px}.flag-pt{background-position:0 -768px}.flag-ro{background-position:0 -792px}.flag-rs{background-position:0 -816px}.flag-ru{background-position:0 -840px}.flag-sa{background-position:0 -864px}.flag-se{background-position:0 -888px}.flag-th{background-position:0 -912px}.flag-tr{background-position:0 -936px}.flag-ua{background-position:0 -960px}.flag-vn{background-position:0 -984px}
+
+.badge {
+	user-select: none;
+}
+
+/* include */
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #638c37;
+}
+/* exclude */
+.custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
+    background-color: #ad5340;
+}
+
+@media (min-width: 992px) {
+  .navbar-expand-lg {
+    overflow: visible;
+  }
+}
+ @media (max-width: 991px) {
+  .navbar-expand-lg {
+    overflow: auto;
+    max-height:100%;
+  }
+  .chapter-container .chapter-list-group,
+  .chapter-container .chapter-list-uploader,
+  .chapter-container .chapter-list-views {
+        font-size: 80%;
+        font-weight: 400;
+    }
+}
+
+.col-form-label-modal {
+  padding-top: calc(0.375rem + 1px);
+  padding-bottom: calc(0.375rem + 1px);
+  margin-bottom: 0;
+  font-size: inherit;
+  line-height: 1.5;
+	font-weight: bold;
+}
+
+.settings-toggler-icon {
+    display: inline-block;
+	padding: 5px 5px 5px 3px;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+}
+
+btn {
+	font-size: 0.875rem;
+}
+
+nav.navbar {
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+}
+nav.navbar .container {
+	min-height: 2.5rem;
+}
+
+.navbar-toggler {
+	width: 56px;
+	height: 40px;
+}
+
+.form-check {
+	padding-top: calc(0.375rem + 1px);
+	padding-bottom: calc(0.375rem + 1px);
+}
+
+.form-control, .dropdown-menu {
+  font-size: 0.875rem;
+}
+
+button.navbar-button {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.theme-dropdown .dropdown-menu {
+	position: static;
+	display: block;
+	margin-bottom: 20px;
+}
+
+.footer {
+	position: absolute;
+	padding: 10px 0;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 50px;
+}
+
+.display-none {
+	display: none;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  background: red;
+  cursor: inherit;
+  display: block;
+}
+input[readonly] {
+  cursor: text !important;
+}
+
+#message_container {
+	position: fixed;
+	top: 70px;
+	z-index: 9999;
+	height: 100px;
+	left: 50%;
+	width: 50%;
+	margin-left: -25%;
+	pointer-events: none;
+ }
+
+img.captcha {
+	margin: 0 auto 15px auto;
+	display: block;
+}
+
+
+#quick_search_form {
+	display: 100px;
+}
+
+img.reader {
+	cursor: pointer;
+	margin: 1vh auto;
+	display: block;
+}
+
+img.max-width {
+	max-width: 100%;
+}
+
+img.max-height {
+	max-height: 100%;
+}
+
+img.avatar {
+	max-width: 100px;
+	max-height: 100px;
+}
+
+img.avatar-fit {
+	width: 100%;
+	max-height: 600px;
+}
+
+img.click {
+	cursor: pointer;
+}
+
+img.webtoon,
+img.long-strip {
+	max-width: 100%;
+	display: block;
+}
+
+img.webtoon {
+	margin: 0 auto;
+}
+
+img.long-strip {
+	margin: 0 auto 10px auto;
+}
+
+.no-underline:hover,
+.no-underline:focus {
+	text-decoration: none;
+}
+
+a.genre,
+a.genre:hover,
+a.genre:focus {
+  color: #fff;
+}
+
+a.manga_title,
+a.manga_title:hover,
+a.manga_title:focus {
+  font-weight: bold;
+}
+
+tr.comment {
+	word-break: normal;
+}
+
+textarea.comment-box {
+	resize: vertical;
+}
+
+span.chapter_mark_unread_button {
+	cursor: pointer;
+}
+
+span.chapter_mark_read_button {
+	cursor: pointer;
+}
+
+span.grey {
+	opacity: 0.25;
+}
+
+.z-index-auto {
+	z-index: auto !important;
+}
+
+div.grid {
+	border-radius: 0.25rem;
+	margin: 5px;
+	width: 100px;
+	height: 150px;
+	display: inline-block;
+	overflow: hidden;
+}
+
+div.tiny_logo {
+	width: 40px;
+	height: 60px;
+	overflow: hidden;
+}
+
+div.small_logo {
+	width: 60px;
+	height: 90px;
+	overflow: hidden;
+}
+
+div.sm_md_logo {
+	width: 80px;
+	height: 120px;
+	overflow: hidden;
+}
+
+div.medium_logo {
+	width: 100px;
+	height: 150px;
+	overflow: hidden;
+}
+
+div.hover:hover {
+	opacity: 0.75;
+}
+
+div.large_logo {
+	width: 150px;
+	height: 255px;
+	float: left;
+	display: inline-block;
+	overflow: hidden;
+}
+
+div.car-caption {
+	position: absolute;
+	top: 200px;
+	width: 150px;
+	height: 55px;
+	background-color: rgba(0, 0, 0, 0.75);
+	color: #fff;
+	border-radius: 0 0 0.25rem 0.25rem;
+}
+
+div.car-caption-h {
+	position: absolute;
+	top: 200px;
+	width: 150px;
+	height: 55px;
+	background-color: rgba(64, 0, 0, 0.75);
+	color: #fff;
+	border-radius: 0 0 0.25rem 0.25rem;
+}
+
+a.white {
+	color: #fff;
+}
+
+ul.table-list-inline {
+	margin-bottom: 0;
+}
+
+div.horizontal-window-fit {
+	width: 98vw;
+	position: relative;
+	left: 50%;
+	margin-left: -49vw;
+	overflow-x: hidden;
+}
+
+div.vertical-window-fit {
+	height: 98vh;
+	width: 98vw;
+	position: relative;
+	left: 50%;
+	margin-left: -49vw;
+}
+
+th.ellipsis, td.ellipsis {
+	max-width: 0;
+	overflow: hidden;
+	text-overflow: none;
+	white-space: nowrap;
+}
+
+span.ellipsis{
+	max-width: 100%;
+	position: absolute;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding-right: 0.5rem;
+}
+
+div.img-40 {
+	width: 40px;
+	height: 60px;
+	overflow: hidden;
+	border-radius: 0.25rem;
+}
+
+ol.rules,
+ol {
+	counter-reset: item;
+}
+ol.rules li {
+	display: block;
+	font-size: initial;
+}
+ol.rules li:before {
+	content: counters(item, ".") " ";
+	font-weight: bold;
+/*	font-size: 0.9em;*/
+	counter-increment: item;
+}
+ol.rules > li {
+ /* font-size: 1.25em;*/
+}
+ol.rules ol {
+  padding: 0.25em 1.75em;
+}
+ol.rules {
+  padding-left: 0;
+}
+.strong {
+	font-weight: bold;
+}
+.max-width{
+	max-width: 100%;
+}
+
+.col-form-label {
+	font-weight: bold;
+}
+
+@media (min-width: 768px) {
+	.col-form-label {
+		text-align: right;
+	}
+}
+
+@media (min-width: 992px) {
+	.col-form-label-modal {
+		text-align: right;
+	}
+}
+
+div.form-narrow {
+	max-width: 304px;
+}
+
+.table-md th,
+.table-md td {
+  padding: 0.5rem;
+}
+
+tr.border-top-0 th,
+tr.border-top-0 td {
+  border-top: 0;
+}
+
+tr.post {
+	word-break: break-word;
+}
+
+tr.post .postbody img {
+	max-width: 100%;
+}
+
+/** Highlighted comments/posts **/
+tr.post .highlighted {
+	background-color: rgba(255, 255, 0, 0.15);
+	padding: 2px;
+	margin-bottom: 4px;
+}
+
+/** @username mentions in posts **/
+tr.post .mentioned {
+	color: #fff;
+	background: #c57500;
+	border-radius: 1em;
+	padding: 2px 4px;
+	text-shadow: 0 0 1px #000;
+}
+tr.post .mentioned a {
+	color: #fff;
+}
+
+/** social media buttons on frontpage **/
+.social-media-btns {
+	padding: 4px;
+	line-height: 0;
+}
+.social-media-btns > div {
+	margin: 0;
+	padding: 0;
+}
+.social-media-btns > div:hover {
+	background: rgba(128, 128, 128, 0.2);
+}
+.social-media-btns > div > a {
+	display: block;
+	width: 100%;
+	padding-top: 100%;
+	margin: 0;
+	font-size: 0;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+}
+
+.social-media-btns > div:nth-child(1) > a {
+	background-image: url('/images/misc/sm-tw.png');
+}
+.social-media-btns > div:nth-child(2) > a {
+	background-image: url('/images/misc/sm-rd.png');
+}
+.social-media-btns > div:nth-child(3) > a {
+	background-image: url('/images/misc/sm-dc.png');
+}
+.social-media-btns > div:nth-child(4) > a {
+	background-image: url('/images/misc/sm-wp.png');
+}
+.social-media-btns > div:nth-child(5) > a {
+	background-image: url('/images/misc/sm-tl.png');
+}
+.social-media-btns > div:nth-child(6) > a {
+	background-image: url('/images/misc/sm-veepn.png');
+}
+
+/** User settings banner **/
+.profile-banner-wrapper {
+	max-height: 100px;
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+}
+.profile-banner-show {
+	cursor: pointer;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+	background: rgba(0,0,0,0.5);
+	color: #fff;
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+/** Chips **/
+.chip-array {
+	display: inline-block;
+	margin: 0.5em 0;
+}
+.chip-group .label {
+	display: block;
+	font-weight: 700;
+	margin-bottom: 0;
+}
+.chip-array .chip {
+	display: inline-block;
+	margin-right: .2em;
+	margin-bottom: .2em;
+}
+.chip .badge,
+.chip.badge {
+	font-weight: 400;
+	font-size: 90%;
+	line-height: 1.3;
+}
+.chip .remove {
+	cursor: pointer;
+	opacity: 0.7;
+	margin-left: 0.3em;
+}
+.chip .remove:hover {
+	opacity: 1;
+}
+
+/** Settings / 2fa **/
+.qr-img-wrapper {
+	padding: 1rem;
+}
+.qr-code {
+	margin-left: auto;
+	margin-right: auto;
+}
+pre.code-box {
+	padding: .5rem;
+	border-radius: 4px;
+	white-space: pre-wrap;       /* css-3 */
+	white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+.confirm-2fa-errors {
+	color: red;
+	font-weight: bold;
+	font-family: monospace;
+}
+
+select.form-control:not([size]):not([multiple]) {
+	-webkit-appearance: menulist;
+}
+
+/*
+.spoiler,
+.spoiler > a {
+color: #000;
+background-color: #000;
+}
+.spoiler:hover,
+.spoiler:focus {
+color: #fff;
+}
+.spoiler:hover > a,
+.spoiler:focus > a {
+color: #99f;
+}*/
+
+/** Drama **/
+.drama-track .track-captions.selected .fa-closed-captioning,
+.drama-track .track-captions:not(.selected) .fa-compact-disc {
+	display: none;
+}
+.drama-track .track-captions.selected .drama-captions-link {
+	font-weight: bold;
+}
+
+.drama-player .playbutton,
+.drama-player .seeker-container {
+	font-size: 16px;
+	border-width: 2px;
+	cursor: pointer;
+	transition-duration: 0.2s;
+}
+.drama-player .playbutton:hover,
+.drama-player .seeker-container:hover {
+	border-color: var(--light) !important;
+	box-shadow: 0 0 6px var(--secondary) !important;
+}
+.drama-player .seeker-buffered {
+	opacity: 0.5;
+}
+.drama-player .seeker-position {
+	width: 8px;
+	margin-left: -4px;
+	pointer-events: none;
+}
+.drama-player .captions-display {
+	min-height: 5em;
+	white-space: pre-line;
+}
+.drama-player .captions-display > div {
+	display: inline;
+	text-align: center;
+	font-size: 1.4em;
+	line-height: 1.6em;
+	font-family: 'Open Sans', sans-serif;
+	padding: 0.1em 0.25em;
+	color: #fff;
+	background: rgba(0,0,0,0.6);
+	text-shadow: 1px 1px #000;
+	box-decoration-break: clone;
+	-webkit-box-decoration-break: clone;
+	overflow-wrap: break-word;
+	unicode-bidi: plaintext;
+	text-wrap: balance;
+}
+
+/*******************************
+* MODAL AS LEFT/RIGHT SIDEBAR
+* Add "left" or "right" in modal parent div, after class="modal".
+*******************************/
+	.modal.left .modal-dialog,
+	.modal.right .modal-dialog {
+		position: fixed;
+		margin: auto;
+		width: 275px;
+		height: 100%;
+		transform: translate3d(0%, 0, 0);
+	}
+
+	.modal.left .modal-content,
+	.modal.right .modal-content {
+		height: 100%;
+		overflow-y: auto;
+	}
+
+	.modal.left .modal-body,
+	.modal.right .modal-body {
+		padding: 15px 15px 80px;
+	}
+
+/*Left*/
+	.modal.left.fade .modal-dialog{
+		left: 0px;
+		transition: opacity 0.3s linear, left 0.3s ease-out;
+	}
+
+	.modal.left.fade.in .modal-dialog{
+		left: 0;
+	}
+
+/*Right*/
+	.modal.right.fade .modal-dialog {
+		right: 0px;
+		transition: opacity 0.3s linear, right 0.3s ease-out;
+	}
+
+	.modal.right.fade.in .modal-dialog {
+		right: 0;
+	}

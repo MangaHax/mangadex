@@ -1,0 +1,475 @@
+/* light slate theme by TeslaCuil */
+
+    a,
+    .nav-tabs .nav-link:not(.active):hover,
+    .nav-tabs .nav-link:focus {
+        color: #04101b;
+    }
+
+    a:hover {
+        color: #101f47;
+    }
+
+
+.card-header > a {
+    color: #b3b7d4;
+}
+
+.card-header > a:hover {
+    color: #dce0f5;
+}
+
+.fas.fa-external-link-alt.fa-fw {
+    color: #20303e;
+}
+
+.card-header.text-center >  a {
+    color: #e8e8f1;
+}
+
+#latest_updates, #follows_updates, #site_settings, #change_profile, #change_password, #upload_settings, #reader_settings, #filter_settings, .modal-body, .modal-footer, .well {
+    background: #fff !important;
+    color: black;
+}
+
+body {
+    background-color: #fff;
+    color: #010514;
+}
+
+.nav.nav-tabs li a:hover {
+    color: #000
+}
+
+.navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus {
+    color: #d4d8ea;
+}
+
+.bg-light, .bg-dark  {
+    background-color: rgba(56,64,73, .95) !important;
+    border-bottom: 1px solid #626d80;
+    box-shadow: 0px 3px 8px rgba(40, 50, 66, .75);
+}
+
+.alert {
+    background: #b3bdd1;
+    color: #1f1f20;
+}
+
+.breadcrumb {
+    background: #626d80;
+    color: #e8e8f1;
+}
+
+.breadcrumb > li >  a {
+    color: #e8e8f1;
+}
+
+.breadcrumb > li >  a:hover {
+    color: #fff;
+}
+
+thead,
+.table-header,
+.card-header,
+.modal-header {
+    background: #47505f;
+    color: #e8e8f1 !important;
+}
+
+.table-striped > tbody > tr {
+    background: #FFF !important;
+}
+
+a > .fa-rss {
+    color: #bebec6;
+}
+
+a:hover > .fa-rss {
+    color: #fff;
+}
+
+a.dropdown-toggle > .fa-sort {
+    color: #184c7a !important;
+    background: unset;
+}
+
+.card-header.py-0.px-3 {
+    background: transparent;
+}
+
+.row > .col-lg-6 {
+    border-bottom: 1px solid #626d80 !important;
+}
+
+#content > h3 {
+    border-bottom: 1px solid #4f5969;
+}
+
+div.car-caption {
+    background-color: rgba(52, 62, 78, .85);
+}
+
+.btn-light,
+.btn-light > .fas.fa-chevron-right.fa-fw,
+.btn-light > .fas.fa-chevron-left.fa-fw,
+.page-item .page-link {
+    color: #ffffff;
+}
+
+.btn-light, .page-item .page-link, .page-item.disabled .page-link {
+    background: #47505f;
+}
+
+.btn-light:hover, .btn-light:active, .btn-light:focus, .page-item.active .page-link {
+    background: #626d80 !important;
+    color: #ffffff;
+}
+
+.close {
+    color: #d5d5d5;
+}
+
+.close:hover, .close:focus {
+    color: #ffffff;
+}
+
+.page-link {
+    color: white !important;
+}
+
+.page-link:hover {
+    background: #525c6d !important;
+}
+
+.navbar-light .navbar-nav .nav-link,
+.navbar-light .navbar-brand {
+    color: #f8f9fa;
+}
+
+.navbar-light .navbar-nav .nav-link .d-xl-inline {
+    color: #f8f9fa !important;
+}
+
+.navbar-light .navbar-brand:hover,
+.navbar-light .navbar-brand:focus {
+    color: #afbbcf;
+    text-shadow: none;
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .show > .nav-link,
+.navbar-light .navbar-nav .active > .nav-link,
+.navbar-light .navbar-nav .nav-link.show,
+.navbar-light .navbar-nav .nav-link.active {
+    color: #afbbcf;
+}
+
+.nav.nav-tabs, .nav.nav-pills, .card-header-pills {
+    border-bottom: 3px solid #626d80 !important;
+}
+
+.dropdown-menu, .bg-reader-controls {
+    background: #eceff2;
+}
+
+.dropdown-menu > a, .dropdown-menu > li > a {
+    color: #000;
+}
+
+.dropdown-item:hover, .dropdown-item:focus, .dropdown-item.active {
+    background: #9ca8bb;
+    color: #000;
+}
+
+
+.bootstrap-select > .dropdown-toggle {
+    color: #fff !important;
+}
+
+.card-header.text-center {
+    border-bottom: 3px solid #f8f9fa;
+}
+
+.card, .list-group-item {
+    background: #fff
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-link.active:hover,
+.nav-tabs .nav-item.show .nav-link,
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    background: #626d80;
+    color: white;
+}
+
+.nav-pills .nav-link:not(.active), .nav-pills .show > .nav-link {
+    background: #f8f9fa;
+}
+
+.nav-tabs .nav-link:not(.active):hover,
+.nav-tabs .nav-link:focus,
+.nav-pills .nav-link:not(.active):hover {
+    background: #e3e8f0;
+    color: #184c7a;
+}
+
+
+.float-right.btn-group > button {
+    color: #e3e8f0;
+}
+
+#quick_search_button > .fa-search {
+    color: #4f5969;
+}
+
+#quick_search_button:hover > .fa-search,
+#quick_search_button:active > .fa-search,
+#quick_search_button:focus > .fa-search {
+    color: #5e84c2;
+}
+
+
+
+#quick_search_type:focus,
+#quick_search_type:hover,
+#quick_search_button:active,
+#quick_search_button:hover {
+
+    background-color: #dee4ee;
+}
+
+#quick_search_input,
+#quick_search_button,
+.input-group-btn {
+    background: #f8f9fa;
+}
+
+#uick_search_type, .input-group-prepend > .form-control {
+    background-color: #f8f9fa !important;
+}
+
+.btn-secondary, .btn-default, .btn-outline-secondary {
+    background: #959fb1;
+    color: #fff !important;
+    border: none;
+}
+
+.btn-secondary:hover, .btn-secondary:focus, .btn-default:hover, .btn-default:focus, .btn-outline-secondary:hover, .btn-outline-secondary:focus, .btn-outline-secondary.active {
+    background: #626d80 !important;
+    color: #FFF;
+}
+
+.btn:not(:disabled):not(.disabled):active, .btn:not(:disabled):not(.disabled).active {
+    background: #707d93 !important;
+}
+
+.form-control, .form-control:focus, .code-box {
+    background: #dde1e8;
+}
+
+#post_reply_form > .form-group > .col-xs-12 > .btn-secondary {
+    background: transparent;
+    color: black !important;
+}
+
+#post_reply_form > .form-group > .col-xs-12 > .btn-secondary:hover {
+    background: #a2b3d1;
+    color: black;
+}
+
+.badge-secondary, kbd {
+    background-color: #758593;
+}
+
+.reader-page-bar .thumb, .reader-page-bar:hover .thumb {
+    background: #69758d;
+}
+
+.reader-page-bar .trail {
+    background: rgba(125, 160, 228, .25);
+}
+
+.reader-page-bar .notch:not(.loaded) {
+    background: repeating-linear-gradient(
+         -45deg,
+         rgba(153,161,174, 0.05),
+         rgba(153,161,174, 0.05) 5px,
+         rgba(153,161,174, 0.15) 5px,
+         rgba(153,161,174, 0.15) 10px
+     );
+}
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background: #969db8;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    background: #c4c6d7;
+}
+
+
+/* filter for changing color of in window scroll bars, super hacky method, feel free to remove.
+    .row > .col-lg-6 > p:nth-child(4) {
+        filter: sepia(30%) saturate(100%) grayscale(0) contrast(95%) hue-rotate(200deg) invert(0%);
+}*/
+
+/* global theme changes */
+
+*,
+.rounded
+{
+    border-radius: 0 !important;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background: transparent;
+    color: #888;
+}
+
+.navbar-dark .navbar-toggler {
+    background: transparent;
+}
+
+/* Border Changes / background changes */
+
+.bg-dark {
+    background-image: none;
+}
+
+.alert {
+    border: none;
+    background-image: none;
+}
+
+.breadcrumb, .alert {
+    box-shadow: none;
+}
+
+.card {
+    border: none;
+}
+
+.nav.nav-tabs, .nav-tabs .nav-link {
+    border: none;
+}
+
+.nav.nav-tabs li a {
+    text-decoration: none;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    border: none;
+}
+
+.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
+    border: none;
+}
+
+.nav-pills .nav-link {
+    border: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.card-header {
+    border: none;
+}
+
+.table th,
+.table td {
+    border: none;
+}
+
+.btn-group > .btn:hover, .btn-group > .btn:focus, .btn-group > .btn:active {
+    box-shadow: none;
+}
+
+.btn-light:focus, .btn-light.focus {
+    box-shadow: none !important;
+}
+
+.btn-light {
+    border: none;
+}
+
+.btn-light:hover, .btn-light:active, .btn-light:focus  {
+    background-color: unset;
+    border: none;
+}
+
+.btn-light:not(:disabled):not(.disabled):active, .btn-light:not(:disabled):not(.disabled).active, .show > .btn-light.dropdown-toggle {
+    background-color: unset;
+    border: none;
+}
+
+.btn, .btn-secondary {
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.btn, .btn-success, .btn-primary {
+    background-image: none;
+    border: none;
+}
+
+#quick_search_input, #quick_search_button, .input-group-btn, .form-control, .form-control:focus {
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+ .form-control, #quick_search_input, .form-control:focus {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+#quick_search_type {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+
+    overflow: auto;
+}
+
+/* this is to make up for the lost space that the dropdown arrow would take */
+#quick_search_type {
+    padding-right: 25px
+}
+
+.modal-header > button {
+    text-shadow: none;
+}
+
+.modal-body > .form-group > div > button {
+    border-radius: 0;
+}
+
+.modal-body > .form-group > div > button:first-child {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.modal-body > .form-group > div > button:last-child {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.page-item .page-link {
+    border: none;
+}
+
+.page-link:focus {
+    box-shadow: none;
+}
+
+/* by default, site settings does not have a background, and when you add one it looks really bad without some padding */
+#site_settings, #change_profile, #change_password, #upload_settings, #reader_settings, #filter_settings {
+    padding: 20px;
+}
+
+/* this is to fix tab highlight overlapping the bottom border (default is -1px) */
+.nav-tabs .nav-item {
+    margin-bottom: 0;
+}

@@ -1,0 +1,1 @@
+<div class='alert alert-<?= $templateVar['type'] ?> text-center' role='alert'><strong><?= $templateVar['strong'] ?>:</strong> <?= $templateVar['text'] ?></div>

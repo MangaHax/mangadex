@@ -1,0 +1,37 @@
+{
+  "name": "mangadex",
+  "version": "1.0.0",
+  "description": "MangaDex JS scripts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config=webpack.config.js --mode=production",
+    "build-watch": "webpack --config=webpack.config.js  --mode=production --watch",
+    "build-dev": "webpack --config=webpack.config.js  --mode=development"
+  },
+  "author": "MangaDex",
+  "private": true,
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators": "^6.24.1",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
+    "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.2.5",
+    "@babel/runtime": "^7.3.1",
+    "date-fns": "^2.0.0-alpha.27",
+    "dotenv-webpack": "^1.7.0",
+    "eligrey-classlist-js-polyfill": "^1.2.20180112",
+    "formdata-polyfill": "^3.0.18",
+    "polyfill-queryselector": "^1.0.2",
+    "url-polyfill": "^1.1.3",
+    "vtt.js": "^0.13.0",
+    "whatwg-fetch": "^3.0.0"
+  }
+}

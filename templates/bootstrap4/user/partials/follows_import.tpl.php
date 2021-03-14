@@ -1,0 +1,4 @@
+<form id="import_form" method="post" class="my-3 text-center">
+    <textarea required rows="10" name="json" class="mb-3 form-control" placeholder="Open your JSON file in notepad and paste here. No need to remove manga that you have followed on MangaDex, as those will be ignored. Your JSON will be imported immediately. If it does not, email your JSON to mangadexstaff@gmail.com. Please note that only the JSON exported directly from the offical batoto follows exporter works. Non-offical JSONs will most likely fail to import. To export from Batoto, export the 'JSON (full)' file with your batoto account at https://vatoto.com/myfollows in the right sidebar."></textarea>
+    <button type="submit" class="btn btn-secondary" id="import_button"><?= display_fa_icon('upload') ?> <span class="span-1280">Upload</span></button>
+</form>

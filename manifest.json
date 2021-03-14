@@ -1,0 +1,33 @@
+{
+  "short_name": "MangaDex",
+  "name": "MangaDex - High Quality Manga, no Ads",
+  "description": "Read manga online for free at MangaDex with no ads, high quality images and support scanlation groups!",
+  "icons": [
+    {
+      "src": "/images/misc/mangadex-lg.png",
+      "type": "image/png",
+      "sizes": "880x880"
+    },
+    {
+      "src": "/images/misc/mangadex-sm.png",
+      "type": "image/png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "/images/misc/mangadex-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/images/misc/mangadex-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "background_color": "#2e3439",
+  "display": "standalone",
+  "theme_color": "#f79421",
+  "version": "3.0"
+}
