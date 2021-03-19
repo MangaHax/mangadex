@@ -1,6 +1,7 @@
 <?php
-    //$genres = (new Genres())->toArray();
-    $grouped_genres = new Grouped_Genres();
+//$genres = (new Genres())->toArray();
+$grouped_genres = new Grouped_Genres();
+
 ?>
 
 <!-- Nav tabs -->
@@ -30,7 +31,7 @@
                     </select>
                 </div>
             </div>
-			<div class="form-group row">
+            <div class="form-group row">
                 <label for="navigation" class="col-md-4 col-lg-3 col-xl-2 col-form-label">Navigation:</label>
                 <div class="col-md-8 col-lg-9 col-xl-10">
                     <select class="form-control selectpicker" id="navigation" name="navigation">
@@ -50,20 +51,11 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="reader" class="col-md-4 col-lg-3 col-xl-2 col-form-label">Reader:</label>
+                <label for="mdh_portlimit" class="col-md-4 col-lg-3 col-xl-2 col-form-label">MD@H Port limit:</label>
                 <div class="col-md-8 col-lg-9 col-xl-10">
-                    <select class="form-control selectpicker" id="reader" name="reader">
-                        <option <?= (!$templateVar['user']->reader ? 'selected' : '') ?> value="0">Default</option>
-                        <option <?= ($templateVar['user']->reader ? 'selected' : '') ?> value="1">Legacy</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="data_saver" class="col-md-4 col-lg-3 col-xl-2 col-form-label">Data saver:</label>
-                <div class="col-md-8 col-lg-9 col-xl-10">
-                    <select class="form-control selectpicker" id="data_saver" name="data_saver">
-                        <option <?= !$templateVar['user']->data_saver ? 'selected' : '' ?> value="0">Off</option>
-                        <option <?= $templateVar['user']->data_saver ? 'selected' : '' ?> value="1">On</option>
+                    <select class="form-control selectpicker" id="mdh_portlimit" name="mdh_portlimit">
+                        <option <?= !($templateVar['user']->mdh_portlimit ?? false) ? 'selected' : '' ?> value="0">Normal</option>
+                        <option <?= ($templateVar['user']->mdh_portlimit ?? false) ? 'selected' : '' ?> value="1">SSL Port (443) only</option>
                     </select>
                 </div>
             </div>
@@ -111,6 +103,15 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="list_privacy" class="col-md-4 col-lg-3 col-xl-2 col-form-label">Receiving Direct Messages:</label>
+                <div class="col-md-8 col-lg-9 col-xl-10">
+                    <select class="form-control selectpicker" id="dm_privacy" name="dm_privacy">
+                        <option <?= (($templateVar['user']->dm_privacy ?? 0) == 0 ? 'selected' : '') ?> value="0">From everyone</option>
+                        <option <?= (($templateVar['user']->dm_privacy ?? 0) == 1 ? 'selected' : '') ?> value="1">From friends only (applies to new DM threads)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="list_privacy" class="col-md-4 col-lg-3 col-xl-2 col-form-label">MDList privacy:</label>
                 <div class="col-md-8 col-lg-9 col-xl-10">
                     <select class="form-control selectpicker" id="list_privacy" name="list_privacy">
@@ -126,10 +127,10 @@
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Preferred width of 1400px. Max 1MB" disabled name="old_file">
                         <span class="input-group-append">
-							<span class="btn btn-secondary btn-file">
-								<?= display_fa_icon('folder-open', '', '', 'far') ?> <span>Browse</span> <input type="file" name="file" id="file" accept=".<?= IMPLODE(",.", ALLOWED_IMG_EXT) ?>">
-							</span>
-						</span>
+                            <span class="btn btn-secondary btn-file">
+                                <?= display_fa_icon('folder-open', '', '', 'far') ?> <span>Browse</span> <input type="file" name="file" id="file" accept=".<?= IMPLODE(",.", ALLOWED_IMG_EXT) ?>">
+                            </span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -181,7 +182,7 @@
             <div class="form-group row">
                 <label for="email" class="col-md-4 col-lg-3 col-xl-2 col-form-label">Email:</label>
                 <div class="col-md-8 col-lg-9 col-xl-10">
-                    <input type="email" class="form-control" id="email" name="email" value="<?= $templateVar['user']->email ?>" title="Send ixlone a message on site to change this." disabled>
+                    <input type="email" class="form-control" id="email" name="email" value="<?= $templateVar['user']->email ?>">
                 </div>
             </div>
             <div class="form-group row">
@@ -210,10 +211,10 @@
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Leave blank if no change to image. Max 1MB" disabled name="old_file">
                         <span class="input-group-append">
-							<span class="btn btn-secondary btn-file">
-								<?= display_fa_icon('folder-open', '', '', 'far') ?> <span>Browse</span> <input type="file" name="file" id="file" accept=".<?= IMPLODE(",.", ALLOWED_IMG_EXT) ?>">
-							</span>
-						</span>
+                            <span class="btn btn-secondary btn-file">
+                                <?= display_fa_icon('folder-open', '', '', 'far') ?> <span>Browse</span> <input type="file" name="file" id="file" accept=".<?= IMPLODE(",.", ALLOWED_IMG_EXT) ?>">
+                            </span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -264,7 +265,7 @@
 
         <?php if (isset($templateVar['session_html'])) : ?>
             <?= $templateVar['session_html'] ?>
-		<?php endif; ?>
+        <?php endif; ?>
     </div>
 
     <div role="tabpanel" class="tab-pane fade" id="upload_settings">
@@ -320,9 +321,9 @@
                         </select>
                     </div>
                 </div>
-				<?= $templateVar['user']->premium ? "" : "</fieldset>" ?>
+                <?= $templateVar['user']->premium ? "" : "</fieldset>" ?>
 
-				<?= count($templateVar['user_clients']) ? "" : "<fieldset disabled>" ?>
+                <?= count($templateVar['user_clients']) ? "" : "<fieldset disabled>" ?>
                 <div class="form-group row">
                     <label for="show_mah_badge" class="col-md-4 col-lg-3 col-xl-2 col-form-label">Show MD@H badge:</label>
                     <div class="col-md-8 col-lg-9 col-xl-10">
@@ -332,21 +333,21 @@
                         </select>
                     </div>
                 </div>
-				<?= count($templateVar['user_clients']) ? "" : "</fieldset>" ?>
-				
-				<?= ($templateVar['user']->premium || count($templateVar['user_clients'])) ? "" : "<fieldset disabled>" ?>
+                <?= count($templateVar['user_clients']) ? "" : "</fieldset>" ?>
+
+                <?= ($templateVar['user']->premium || count($templateVar['user_clients'])) ? "" : "<fieldset disabled>" ?>
                 <div class="text-center">
                     <button type="submit" class="btn btn-secondary" id="supporter_settings_button"><?= display_fa_icon('save') ?> Save</button>
                 </div>
                 <?= $templateVar['user']->premium ? "" : "</fieldset>" ?>
-            </form><br/>
+            </form><br />
 
-            <?php if ($templateVar['user']->premium >= 1 && count($templateVar['user']->notes) >= 1): ?>
+            <?php if ($templateVar['user']->premium >= 1 && count($templateVar['user']->notes) >= 1) : ?>
                 <div class="row">
                     <label class="col-md-4 col-lg-3 col-xl-2 col-form-label">Notes</label>
                 </div>
 
-                <?php foreach ($templateVar['user']->notes as $affectedUserId => $savedNote): ?>
+                <?php foreach ($templateVar['user']->notes as $affectedUserId => $savedNote) : ?>
                     <div class="row mt-1">
                         <a class="col-md-4 col-lg-3 col-xl-2 col-form-label" href="/user/<?= $affectedUserId ?>/<?= slugify($savedNote['username']) ?>"><?= $savedNote['username'] ?>:</a>
                         <div class="col-md-8 col-lg-9 col-xl-10 inline">
@@ -359,37 +360,37 @@
     </div>
 
     <div role="tabpanel" class="tab-pane fade" id="blocks">
-		<?php if ($templateVar['user_blocked_groups']) : ?>
-			<table class="table table-md table-striped">
-				<thead>
-					<tr class="border-top-0">
-						<th><?= display_fa_icon('users') ?></th>
-						<th class="text-right"><?= display_fa_icon('question-circle') ?></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach($templateVar['user_blocked_groups'] as $group_id => $group_name) : ?>
-						<tr>
-							<td><a href="/group/<?= $group_id ?>/<?= slugify($group_name) ?>"><?= $group_name?></a></td>
-							<td class="text-right"><button type="button" class="group_unblock_button btn btn-danger btn-sm" data-group-id="<?= $group_id ?>"><?= display_fa_icon('check-circle') ?> Unblock</button></td>
-						</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
-		<?php else: ?>
-			<div class="alert alert-success text-center">You have not blocked any groups.</div>
-		<?php endif; ?>
-		<form class="mb-3" id="group_block_form" method="post">
-			<div class="input-group">
-				<div class="input-group-prepend">
-					<span class="input-group-text"><?= display_fa_icon('users') ?></span>
-				</div>
-				<input type="number" class="form-control" id="block_group_id" name="block_group_id" placeholder="group_id" required >
-				<div class="input-group-append">
-					<button type="submit" class="btn btn-warning" id="group_block_button"><?= display_fa_icon('minus-circle') ?> Block</button>
-				</div>
-			</div>
-		</form>
-		<div class="alert alert-info text-center">Chapters from blocked groups will be hidden on all chapter listings.</div>
-	</div>	
+        <?php if ($templateVar['user_blocked_groups']) : ?>
+            <table class="table table-md table-striped">
+                <thead>
+                    <tr class="border-top-0">
+                        <th><?= display_fa_icon('users') ?></th>
+                        <th class="text-right"><?= display_fa_icon('question-circle') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($templateVar['user_blocked_groups'] as $group_id => $group_name) : ?>
+                        <tr>
+                            <td><a href="/group/<?= $group_id ?>/<?= slugify($group_name) ?>"><?= $group_name ?></a></td>
+                            <td class="text-right"><button type="button" class="group_unblock_button btn btn-danger btn-sm" data-group-id="<?= $group_id ?>"><?= display_fa_icon('check-circle') ?> Unblock</button></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else : ?>
+            <div class="alert alert-success text-center">You have not blocked any groups.</div>
+        <?php endif; ?>
+        <form class="mb-3" id="group_block_form" method="post">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><?= display_fa_icon('users') ?></span>
+                </div>
+                <input type="number" class="form-control" id="block_group_id" name="block_group_id" placeholder="group_id" required>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-warning" id="group_block_button"><?= display_fa_icon('minus-circle') ?> Block</button>
+                </div>
+            </div>
+        </form>
+        <div class="alert alert-info text-center">Chapters from blocked groups will be hidden on all chapter listings.</div>
+    </div>
 </div>

@@ -998,6 +998,24 @@ function get_zip_originalsize($filename) {
 	return $size;
 }
 
+function get_banners($enabledOnly = true){
+    global $sql;
+    
+    $query = "
+        SELECT banner_id, banners.user_id, username, ext, is_enabled, is_anonymous, levels.level_name, levels.level_colour
+        FROM mangadex_banners banners
+        JOIN mangadex_users users
+            ON banners.user_id = users.user_id
+        JOIN mangadex_user_levels levels
+            ON users.level_id = levels.level_id
+            ";
+    if($enabledOnly){
+        $query .= " WHERE is_enabled = 1";
+    }
+    $banners = $sql->prep("banners_" . ($enabledOnly ? "enabled" : "all"), $query, [], 'fetchAll', PDO::FETCH_ASSOC, 600);
+    return $banners;
+}
+
 /*************************************
  * Discord webhook
  *************************************/

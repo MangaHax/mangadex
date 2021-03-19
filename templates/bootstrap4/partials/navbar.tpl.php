@@ -88,7 +88,7 @@ $friend_requests = count($templateVar['user']->get_pending_friends_user_ids());
 						<a class="dropdown-item" href="/rules"><?= display_fa_icon('list', 'Rules') ?> Rules</a>
 						<a class="dropdown-item" href="/about"><?= display_fa_icon('info', 'About') ?> About</a>
 						<a class="dropdown-item" href="/changelog"><?= display_fa_icon('code', 'Change log') ?> Change log</a>
-						<a class="dropdown-item" href="/affiliates"><?= display_fa_icon('handshake', 'Affiliates', '', 'far') ?> Affiliates</a>
+						<a class="dropdown-item" href="/support/affiliates"><?= display_fa_icon('handshake', 'Affiliates', '', 'far') ?> Affiliates</a>
                         <a class="dropdown-item" href="/title/30461/bocchi-sensei-teach-me-mangadex"><?= display_fa_icon('question', 'Tutorial') ?> Tutorial</a>
 					</div>
 				</li>
@@ -134,6 +134,7 @@ $friend_requests = count($templateVar['user']->get_pending_friends_user_ids());
 						else { ?>
 							<?= validate_level($templateVar['user'], 'admin') ? "<a class='dropdown-item' href='/admin'>" . display_fa_icon('user-md') . " Admin</a>" : "" ?>
 							<?= validate_level($templateVar['user'], 'mod') ? "<a class='dropdown-item' href='/mod'>" . display_fa_icon('user-md') . " Moderation</a>" : "" ?>
+                            <?= validate_level($templateVar['user'], 'pr') ? "<a class='dropdown-item' href='/pr'>" . display_fa_icon('user-md') . " Public Relations</a>" : "" ?>
 
 							<?= validate_level($templateVar['user'], 'mod') ? "<div class='dropdown-divider'></div>" : "" ?>
 

@@ -10,7 +10,7 @@ use Mangadex\Exception\Http\UnavailableForLegalReasonsHttpException;
 
 class ChapterController extends APIController
 {
-    const CHAPTERS_LIMIT = 6000;
+    const CHAPTERS_LIMIT = 8000;
     const CH_STATUS_OK = 'OK';
     const CH_STATUS_DELETED = 'deleted';
     const CH_STATUS_DELAYED = 'delayed';
@@ -36,10 +36,9 @@ class ChapterController extends APIController
 
     public function view($path)
     {
-        /**
-         * @param array{0: int|string, 1: string|null, 2: int|string|mixed|null} $path
-         */
-        [$id, $subResource, $subResourceId] = $path;
+        $id = $path[0] ?? null;
+        $subResource = $path[1] ?? null;
+        $subResourceId = $path[2] ?? null;
 
         $id = $this->validateId($id);
 
@@ -53,6 +52,13 @@ class ChapterController extends APIController
         if (isset($normalized['pages'])) {
             $this->updateChapterViews($chapter);
         }
+
+        if (in_array('manga', $this->request->query->getList('include'))) {
+            $mangaController = new MangaController();
+            $manga = $mangaController->normalize($mangaController->fetch($normalized['mangaId']));
+            $normalized = ['chapter' => $normalized, 'manga' => $manga];
+        }
+
         return $normalized;
     }
 
@@ -85,6 +91,13 @@ class ChapterController extends APIController
         $limit = $this->request->query->getInt('limit', 100);
         if ($limit < 10 || $limit > 100) {
             throw new BadRequestHttpException("Invalid limit, range must be within 10 - 100.");
+        }
+
+        if ($this->request->query->getBoolean('blockgroups', true)) {
+            $blockedGroups = $this->user->get_blocked_groups();
+            if ($blockedGroups) {
+                $search['blocked_groups'] = array_keys($blockedGroups);
+            }
         }
 
         $chapters = new \Chapters($search);
@@ -153,9 +166,11 @@ class ChapterController extends APIController
         if (!empty($langFilter)) {
             $search["multi_lang_id"] = $langFilter;
         }
-        $blockedGroups = $this->user->get_blocked_groups();
-        if ($blockedGroups) {
-            $search['blocked_groups'] = array_keys($blockedGroups);
+        if ($this->request->query->getBoolean('blockgroups', true)) {
+            $blockedGroups = $this->user->get_blocked_groups();
+            if ($blockedGroups) {
+                $search['blocked_groups'] = array_keys($blockedGroups);
+            }
         }
         if ($hentai !== 1) { // i.e. if hentai is 0 (hide) or >1 (show only)
             $search['manga_hentai'] = $hentai ? 1 : 0;
@@ -174,13 +189,25 @@ class ChapterController extends APIController
         $chaptersResult = $chapters->query_read($order, $limit, max($page, 1));
         $normalized = $this->normalizeList($chaptersResult, false);
 
+        if ($userResource->user_id === $this->user->user_id) {
+            $readChapters = $this->user->get_read_chapters();
+            foreach ($normalized['chapters'] as &$chapter) {
+                $chapter['read'] = in_array(
+                    $chapter['id'],
+                    $readChapters
+                );
+            }
+        }
+
         // include basic manga entities
         $manga = [];
-        foreach ($chaptersResult as $chapter) {
+        foreach ($chaptersResult as &$chapter) {
             if (!isset($manga[$chapter['manga_id']])) {
                 $manga[$chapter['manga_id']] = [
                     'id' => $chapter['manga_id'],
+                    // TODO: remove 'name'
                     'name' => $chapter['manga_name'],
+                    'title' => $chapter['manga_name'],
                     'isHentai' => (bool)$chapter['manga_hentai'],
                     'lastChapter' => (!empty($chapter['manga_last_chapter']) && $chapter['manga_last_chapter'] !== '0') ? $chapter['manga_last_chapter'] : null,
                     'lastVolume' => (string)$chapter['manga_last_volume'] ?: null,
@@ -208,6 +235,7 @@ class ChapterController extends APIController
             'groups' => [],
             'uploader' => $chapter->user_id,
             'timestamp' => $chapter->upload_timestamp,
+            'threadId' => $chapter->thread_id,
             'comments' => $chapter->thread_posts ?? 0,
             'views' => $chapter->chapter_views ?? 0,
         ];
@@ -218,36 +246,58 @@ class ChapterController extends APIController
         });
         $normalized['groups'] = array_map(function ($g) {
             return ['id' => $g[0], 'name' => $g[1]];
-        }, $groupsFiltered);
+        }, array_values($groupsFiltered));
 
         if ($fullData) {
+            $isValidated = validate_level($this->user, 'pr')
+                || $this->request->headers->get("API_KEY") === PRIVATE_API_KEY;
+
             $normalized['status'] = self::CH_STATUS_OK;
             $isExternal = substr($chapter->page_order, 0, 4) === 'http';
+            $isRestricted = in_array($chapter->manga_id, RESTRICTED_MANGA_IDS) &&
+                !validate_level($this->user, 'contributor') &&
+                            !$hasPrivateAuth &&
+                $this->user->get_chapters_read_count() < MINIMUM_CHAPTERS_READ_FOR_RESTRICTED_MANGA;
+            $countryCode = strtoupper(get_country_code($this->user->last_ip));
+            $isRegionBlocked = isset(REGION_BLOCKED_MANGA[$countryCode]) &&
+                in_array($chapter->manga_id, REGION_BLOCKED_MANGA[$countryCode]) &&
+                !$isValidated;
 
             // Set status when something other than OK
             if ($chapter->chapter_deleted) {
-                if (!validate_level($this->user, 'pr')) {
+                if (!$isValidated) {
                     throw new GoneHttpException(self::CH_STATUS_DELETED);
                 }
                 $normalized['status'] = self::CH_STATUS_DELETED;
             } else if (!$chapter->available) {
-                if (!validate_level($this->user, 'pr')) {
+                if (!$isValidated) {
                     throw new UnavailableForLegalReasonsHttpException(self::CH_STATUS_UNAVAILABLE);
                 }
                 $normalized['status'] = self::CH_STATUS_UNAVAILABLE;
                 $normalized['groups'] = [];
             } else if ($chapter->upload_timestamp > time()) {
+                if (!$isValidated) {
+                    $groupLeaderIds = [$chapter->group_leader_id, $chapter->group_leader_id_2, $chapter->group_leader_id_3];
+                    $isValidated = in_array($this->user->user_id, array_filter($groupLeaderIds, function ($n) {
+                        return $n > 0;
+                    }));
+                }
+                if (!$isValidated) {
+                    $groups = array_map(function ($g) {
+                        return new \Group($g['id']);
+                    }, $normalized['groups']);
+                    $groupMemberIds = array_reduce($groups, function ($acc, $g) {
+                        return array_merge($acc, array_keys($g->get_members()));
+                    }, []);
+                    $isValidated = in_array($this->user->user_id, $groupMemberIds);
+                }
                 $normalized['status'] = self::CH_STATUS_DELAYED;
                 $normalized['groupWebsite'] = $chapter->group_website ?: null;
             } else if ($isExternal) {
                 $normalized['status'] = self::CH_STATUS_EXTERNAL;
                 $normalized['pages'] = $chapter->page_order;
-            } else if (
-                in_array($chapter->manga_id, RESTRICTED_MANGA_IDS) &&
-                !validate_level($this->user, 'contributor') &&
-                $this->user->get_chapters_read_count() < MINIMUM_CHAPTERS_READ_FOR_RESTRICTED_MANGA
-            ) {
-                if (!validate_level($this->user, 'pr')) {
+            } else if ($isRestricted || $isRegionBlocked) {
+                if (!$isValidated) {
                     throw new ForbiddenHttpException(self::CH_STATUS_RESTRICTED);
                 }
                 $normalized = [
@@ -257,36 +307,20 @@ class ChapterController extends APIController
             }
 
             // Include page information for non-external chapters and only for non-restricted users
-            if (!$isExternal && ($normalized['status'] === self::CH_STATUS_OK || validate_level($this->user, 'pr'))) {
+            if (!$isExternal && ($normalized['status'] === self::CH_STATUS_OK || $isValidated)) {
                 $pages = explode(',', $chapter->page_order);
 
-                $serverFallback = LOCAL_SERVER_URL;
+                $serverFallback = IMG_SERVER_URL;
                 $serverNetwork = null;
-                // when a chapter does not exist on the local webserver, it gets an id
-                // since all imageservers share the same data, we can assign any imageserver with the best location to the user
-                if ($chapter->server > 0) {
-                    if ($this->user->md_at_home ?? false) {
-                        try {
-                            $subsubdomain = $this->mdAtHomeClient->getServerUrl($chapter->chapter_hash, $pages, _IP);
-                            if (!empty($subsubdomain)) {
-                                $serverNetwork = $subsubdomain;
-                            }
-                        } catch (\Throwable $t) {
-                            trigger_error($t->getMessage(), E_USER_WARNING);
-                        }
+
+                // use md@h for all images
+                try {
+                    $subsubdomain = $this->mdAtHomeClient->getServerUrl($chapter->chapter_hash, $pages, _IP, $this->user->mdh_portlimit ?? false);
+                    if (!empty($subsubdomain)) {
+                        $serverNetwork = $subsubdomain;
                     }
-                    $serverId = -1;
-                    if ($this->request->query->has('server')) {
-                        // if the parameter was trash, this returns -1
-                        $serverId = get_server_id_by_code($this->request->query->get('server'));
-                    }
-                    if ($serverId < 1) {
-                        // try to select a region-based server if we haven't one set already
-                        $serverId = get_server_id_by_geography();
-                    }
-                    if ($serverId > 0) {
-                        $serverFallback = "https://s$serverId.mangadex.org";
-                    }
+                } catch (\Throwable $t) {
+                    trigger_error($t->getMessage(), E_USER_WARNING);
                 }
                 $server = $serverNetwork ?: $serverFallback;
                 $dataDir = $this->request->query->getBoolean('saver') ? '/data-saver/' : '/data/';

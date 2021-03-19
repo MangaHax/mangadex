@@ -1,6 +1,6 @@
 <?php
 $manga_lists = new Manga_Lists();
-$array_of_manga_ids = $manga_lists->get_manga_list(11);
+$array_of_manga_ids = $manga_lists->get_manga_list(12);
 
 $search = [];
 

@@ -8,10 +8,9 @@ class RelationTypeController extends APIController
 {
     public function view($path)
     {
-        /**
-         * @param array{0: int|string, 1: string|null, 2: int|string|mixed|null} $path
-         */
-        [$id, $subResource, $subResourceId] = $path;
+        $id = $path[0] ?? null;
+        $subResource = $path[1] ?? null;
+        $subResourceId = $path[2] ?? null;
 
         if (!empty($id)) {
             throw new NotFoundHttpException();

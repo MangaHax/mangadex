@@ -29,7 +29,7 @@
 
     switch ($templateVar['user']->reader_mode) {
         case 0:
-            ?>
+    ?>
 
             <img id="current_page" class="reader <?= ($templateVar['user']->image_fit == 2) ? 'max-height' : 'max-width' ?>" src="<?= $templateVar['server'] ?><?= $templateVar['chapter']->chapter_hash ?>/<?= $templateVar['page_array'][$templateVar['page']] ?? '' ?>" alt="image" data-page="<?= $templateVar['page'] ?>" />
 
@@ -39,15 +39,13 @@
         case 2: //long-strip
             foreach ($templateVar['page_array'] as $key => $x) {
                 if (!$templateVar['chapter']->server && $templateVar['chapter']->chapter_id == 256885 && in_array($key, [1])) {
-                    ?>
+            ?>
                     <img class="long-strip <?= ($templateVar['user']->reader_click) ? "click" : "" ?>" src="/img.php?x=/data/<?= "{$templateVar['chapter']->chapter_hash}/$x" ?>" alt="image <?= $key ?>" />
-                    <?php
-                }
-
-                else {
-                    ?>
+                <?php
+                } else {
+                ?>
                     <img class="long-strip <?= ($templateVar['user']->reader_click) ? "click" : "" ?>" src="<?= "{$templateVar['server']}{$templateVar['chapter']->chapter_hash}/$x" ?>" alt="image <?= $key ?>" />
-                    <?php
+                <?php
                 }
             }
 
@@ -56,17 +54,15 @@
         case 3: //webtoon
             foreach ($templateVar['page_array'] as $key => $x) {
                 if (!$templateVar['chapter']->server && $templateVar['chapter']->chapter_id == 256885 && in_array($key, [1])) {
-                    ?>
+                ?>
                     <img class="webtoon <?= ($templateVar['user']->reader_click) ? "click" : "" ?>" src="/img.php?x=/data/<?= "{$templateVar['chapter']->chapter_hash}/$x" ?>" alt="image <?= $key ?>" />
-                    <?php
-                }
-
-                else {
-                    ?>
+                <?php
+                } else {
+                ?>
 
                     <img class="webtoon <?= ($templateVar['user']->reader_click) ? "click" : "" ?>" src="<?= "{$templateVar['server']}{$templateVar['chapter']->chapter_hash}/$x" ?>" alt="image <?= $key ?>" />
 
-                    <?php
+            <?php
                 }
             }
 
@@ -75,7 +71,7 @@
         default:
             ?>
             <img id="current_page" class="reader <?= ($templateVar['user']->image_fit == 2) ? 'max-height' : 'max-width' ?>" src="<?= $templateVar['server'] ?><?= $templateVar['chapter']->chapter_hash ?>/<?= $templateVar['page_array'][$templateVar['page']] ?>" alt="image" data-page="<?= $templateVar['page'] ?>" />
-            <?php
+    <?php
             break;
     }
     ?>
@@ -111,7 +107,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="report_chapter_label"><?= display_fa_icon('cog')?> Report chapter</h5>
+                <h5 class="modal-title" id="report_chapter_label"><?= display_fa_icon('cog') ?> Report chapter</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -123,9 +119,11 @@
                         <div class="col-md-9">
                             <select required title="Select a reason" class="form-control selectpicker" id="type_id" name="type_id">
                                 <?php
-                                $chapter_reasons = array_filter($templateVar['report_reasons'], function($reason) { return REPORT_TYPES[$reason['type_id']] === 'Chapter'; });
-                                foreach ($chapter_reasons as $reason): ?>
-                                  <option value="<?= $reason['id'] ?>"><?= $reason['text'] ?><?= $reason['is_info_required'] ? ' *' : '' ?></option>
+                                $chapter_reasons = array_filter($templateVar['report_reasons'], function ($reason) {
+                                    return REPORT_TYPES[$reason['type_id']] === 'Chapter';
+                                });
+                                foreach ($chapter_reasons as $reason) : ?>
+                                    <option value="<?= $reason['id'] ?>"><?= $reason['text'] ?><?= $reason['is_info_required'] ? ' *' : '' ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -133,7 +131,7 @@
                     <div class="form-group row">
                         <label for="chapter_name" class="col-md-3 col-form-label">Explanation</label>
                         <div class="col-md-9">
-                            <textarea class="form-control" id="info" name="info" placeholder="Optional" ></textarea>
+                            <textarea class="form-control" id="info" name="info" placeholder="Optional"></textarea>
                         </div>
                     </div>
                     <div class="text-center">
@@ -150,7 +148,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="legacy_reader_settings_label"><?= display_fa_icon('cog')?> Legacy reader settings</h5>
+                <h5 class="modal-title" id="legacy_reader_settings_label"><?= display_fa_icon('cog') ?> Legacy reader settings</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -173,6 +171,15 @@
                                 <option <?= (!$templateVar['user']->img_server ? 'selected' : '') ?> value="0">Automatic</option>
                                 <option <?= ($templateVar['user']->img_server == 2 ? 'selected' : '') ?> value="2">North America</option>
                                 <option <?= ($templateVar['user']->img_server == 3 ? 'selected' : '') ?> value="3">Europe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="data_saver" class="col-md-3 col-form-label">Data saver:</label>
+                        <div class="col-md-9">
+                            <select class="form-control selectpicker" id="data_saver" name="data_saver">
+                                <option <?= !$templateVar['user']->data_saver ? 'selected' : '' ?> value="0">Off</option>
+                                <option <?= $templateVar['user']->data_saver ? 'selected' : '' ?> value="1">On</option>
                             </select>
                         </div>
                     </div>

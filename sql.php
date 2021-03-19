@@ -2,9 +2,22 @@
 if (PHP_SAPI !== 'cli')
    die();
 
-require_once ('/home/www/mangadex.org/bootstrap.php'); //must be like this
+require_once ('/var/www/mangadex.org/bootstrap.php'); //must be like this
 
 require_once (ABSPATH . "/scripts/header.req.php");
+
+
+/*
+for ($id = 0; $id < 2491159; $id++) {
+    $memcached->delete("user_{$id}_friends_user_ids");
+    $memcached->delete("user_{$id}_pending_friends_user_ids");
+    $memcached->delete("user_{$id}_friends_user_ids");
+    $memcached->delete("user_{$id}_pending_friends_user_ids");
+    if ($id % 1000 === 0) echo ".";
+}
+die("\nend\n");
+*/
+
 /*
 $result = $sql->query_read('x', " SELECT COUNT(*) AS `Rows`, `user_id` FROM `mangadex_clients` where approved = 1 GROUP BY `user_id` ORDER BY `user_id`   ", 'fetchAll', PDO::FETCH_ASSOC, -1);
 
@@ -154,7 +167,7 @@ foreach ($txs as $tx) {
 }
 */
 /*
-$joined_timestamp = $sql->query_read('x', " SELECT joined_timestamp FROM mangadex_users WHERE joined_timestamp >= 1594166400 ", 'fetchAll', PDO::FETCH_COLUMN, -1);
+$joined_timestamp = $sql->query_read('x', " SELECT joined_timestamp FROM mangadex_users WHERE joined_timestamp >= 1597622400 ", 'fetchAll', PDO::FETCH_COLUMN, -1);
 	
 foreach($joined_timestamp as $value) {
 	$date = date('Y-m-d', $value);
@@ -259,19 +272,19 @@ foreach ($results as $ro) {
 
 /*
 
-$dir    = '/home/www/mangadex.org/data/';
+$dir    = '/var/www/mangadex.org/data/';
 $files = array_diff(scandir($dir), array('..', '.'));
 
 foreach ($files as $file) {
 	
 	$chapter_id = $sql->query_read('chapter_id', " SELECT chapter_id FROM mangadex_chapters WHERE chapter_hash LIKE '$file' ", 'fetchColumn', '', -1); 
-	if ($chapter_id) {
+	if (!$chapter_id) {
 		print $file . " - $chapter_id\n";
 		
-		$sql->modify('update', " UPDATE mangadex_chapters SET server = 1 WHERE chapter_id = ? LIMIT 1; ", [$chapter_id]);
-		$memcached->delete("chapter_$chapter_id");
+		//$sql->modify('update', " UPDATE mangadex_chapters SET server = 1 WHERE chapter_id = ? LIMIT 1; ", [$chapter_id]);
+		//$memcached->delete("chapter_$chapter_id");
 		
-		//rename("/home/www/mangadex.org/data/$file", "/home/www/mangadex.org/delete/$file"); 
+		rename("/var/www/mangadex.org/data/$file", "/var/www/mangadex.org/delete/$file"); 
 		
 	}
 }
@@ -338,7 +351,7 @@ foreach ($array as $manga) {
 	
 }
 */
-
+/*
 $results = $sql->query_read('x', " SELECT * FROM mangadex_users where level_id = 0 and user_id > 1900000 order by user_id desc ", 'fetchAll', PDO::FETCH_ASSOC, -1);
 foreach ($results as $row) {
 	$uid = $row['user_id'];
@@ -348,7 +361,7 @@ foreach ($results as $row) {
 	print $uid . ' ';
 	
 }
-
+*/
 /*
 foreach (WALLET_QR['ETH'] as $qr) {
 	print "Fetching $qr\n\n";
@@ -409,12 +422,30 @@ foreach ($txs as $tx) {
 
 
 //$result = $sql->query_read('x', " SELECT chapters.*, users.level_id, users.user_id, users.username FROM `mangadex_chapters` as chapters left join mangadex_users as users on chapters.user_id = users.user_id where users.level_id = 0 and chapters.chapter_deleted = 1 and chapters.server = 0  ", 'fetchAll', PDO::FETCH_ASSOC, -1);
-/*
-$result = $sql->query_read('x', " SELECT * FROM `mangadex_chapters` WHERE `manga_id` = 47 AND `server` = 1 AND `chapter_deleted` = 1   ", 'fetchAll', PDO::FETCH_ASSOC, -1);
+
+//$result = $sql->query_read('x', " SELECT * FROM `mangadex_chapters` WHERE `manga_id` = 47 AND `server` = 0 AND `chapter_deleted` = 1   ", 'fetchAll', PDO::FETCH_ASSOC, -1);
+
+$result = $sql->query_read('x', " 
+SELECT * FROM `mangadex_chapters` WHERE `upload_timestamp` > 1604707200 AND upload_timestamp < 1605312000 and `group_id` != 9097 AND `server` = 0 AND `chapter_deleted` = 0 
+", 'fetchAll', PDO::FETCH_ASSOC, -1);
 
 foreach ($result as $row) {
-	print $row['chapter_hash'] . ' ';
-}*/
+	//print $row['chapter_hash'] . ' ';
+	$file = $row['chapter_hash'];
+	$chapter_id = $row['chapter_id'];
+	$memcached->delete("chapter_$chapter_id");
+
+
+                print "$file - $chapter_id\n";
+
+                $sql->modify('update', " UPDATE mangadex_chapters SET server = 1 WHERE chapter_id = ? LIMIT 1; ", [$chapter_id]);
+                //$memcached->delete("chapter_$chapter_id");
+
+                rename("/var/www/mangadex.org/data/$file", "/var/www/mangadex.org/transferred/$file");
+
+
+
+}
 
 //$result = $sql->query_read('x', " SELECT chapters.*, users.level_id, users.user_id, users.username FROM `mangadex_chapters` as chapters left join mangadex_users as users on chapters.user_id = users.user_id where users.level_id = 0 and chapters.chapter_deleted = 1 and chapters.server = 0  ", 'fetchAll', PDO::FETCH_ASSOC, -1);
 
@@ -482,3 +513,4 @@ foreach ($result as $row) {
 
 //var_dump(is_banned_asn('177.100.112.109'));
 //var_dump(get_asn('177.100.112.109'));
+

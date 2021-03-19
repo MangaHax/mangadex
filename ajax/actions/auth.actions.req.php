@@ -236,7 +236,7 @@ switch ($function) {
 			
 			$to = $email1;
 			$subject = "MangaDex: Account Creation - $username";
-			$body = "Thank you for creating an account on MangaDex. \n\nUsername: $username \nPassword: (your chosen password) \n\nActivation code: $activation_key \n\nPlease visit " . URL . "activation/$activation_key to activate your account.";
+			$body = "Thank you for creating an account on MangaDex. \n\nUsername: $username \nPassword: (your chosen password) \n\nActivation code: $activation_key \n\nPlease visit " . URL . "activation/$activation_key to activate your account. \n\n If the above link doesn't work, try logging in and entering the activation code manually here " . URL . "activation instead.";
 			//$body = "Thank you for creating an account on MangaDex. \n\nUsername: $username \nPassword: (your chosen password) Due to problem with a spammer, activation codes are temporarily not being sent in this email. Please reply to this email to request an activation code. Apologies for the inconvenience!";
 
 			send_email($to, $subject, $body); 
@@ -427,7 +427,7 @@ switch ($function) {
                                                                 FROM mangadex_users u 
                                                                 JOIN mangadex_ip_bans b 
                                                                 ON u.creation_ip = b.ip OR u.last_ip = b.ip
-                                                                WHERE user_id = ? LIMIT 1', [$user->user_id], "fetchAll", PDO::FETCH_UNIQUE, -1);
+                                                                WHERE user_id = ? LIMIT 1', [$user->user_id], "fetchColumn", '', -1);
             if($user_banned){
                 $sql->modify('activate', ' UPDATE mangadex_users SET level_id = 0, activated = 1 WHERE user_id = ? AND activated = 0 LIMIT 1 ', [$user->user_id]);
                 }
@@ -464,6 +464,39 @@ switch ($function) {
 		
 		$result = 1;
 		break;
+		
+    case "change_activation_email":
+        $email = $_POST['email'];
+
+        if($email != $user->email){
+            // check for another account with this email
+            $count_email = $sql->prep('count_email', ' SELECT count(*) FROM mangadex_users WHERE email = ? ', [$email], 'fetchColumn', '', -1);
+
+            //check for banned hosts
+            $banned_hosts = $sql->query_read('tempmail', "SELECT host FROM mangadex_tempmail ORDER BY host ASC ", 'fetchAll', PDO::FETCH_COLUMN);
+            $email_parts = explode('@', $email);
+            $banned_email = in_array($email_parts[1], $banned_hosts);
+
+            if($count_email || $banned_email){
+                $details = 'This email cannot be used.';
+                print display_alert('danger', 'Failed', $details); // wrong code
+                $result = 0;
+            }
+            else{
+                $sql->modify('change_email', ' UPDATE mangadex_users SET email = ? WHERE user_id = ? LIMIT 1 ', [$email, $user->user_id]);
+                $memcached->delete("user_$user->user_id");
+
+                $to = $email;
+                $subject = "MangaDex: Resend Activation Code - $user->username";
+                $body = "Here's your activation code. \n\nUsername: $user->username \n\nActivation code: $user->activation_key \n\nPlease visit " . URL . "activation/$user->activation_key to activate your account. ";
+
+                send_email($to, $subject, $body, 3);
+                
+                $result = 1;
+            }
+        }
+        
+        break;
 
     case "2fa_setup":
 

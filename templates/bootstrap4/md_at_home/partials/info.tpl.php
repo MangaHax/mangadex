@@ -7,7 +7,7 @@
 
 	<ul>
 		<li>An IPv4 address (static or dynamic).</li>
-		<li>A minimum network speed of 80Mbps up/down.</li>
+		<li>A minimum network speed of 40Mbps up/down.</li>
 		<li>A minimum of 40GB of dedicated storage space, preferably more.</li>
 		<li>24/7 availability (This means the machine must be *on* 24/7).</li>
 	</ul>

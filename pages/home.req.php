@@ -441,6 +441,7 @@ else {
 			", array_keys($blocked_group_ids), 'fetchAll', PDO::FETCH_ASSOC, 60);
 }
 
+$banners = get_banners();
 
 $featured = $memcached->get('featured');
 	
@@ -471,6 +472,7 @@ $templateVars = [
     'latest_news_posts' => $latest_news_posts,
     'featured' => $featured,
     'new_manga' => $new_manga,
+    'banners' => $banners,
 ];
 
 $page_html = parse_template('home', $templateVars);

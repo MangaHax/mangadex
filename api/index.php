@@ -9,7 +9,7 @@ if (isset($_GET['_'])) {
 	http_response_code(666);
 	die();
 }
-	
+
 use Mangadex\Model\Guard;
 
 require_once ('../bootstrap.php');
@@ -280,35 +280,17 @@ switch ($type) {
 					$page_array = array_combine(range(1, count($arr)), array_values($arr));
 				}
 
-                $server_fallback = LOCAL_SERVER_URL;
+				$server_fallback = IMG_SERVER_URL;
 				$server_network = null;
 
-				// when a chapter does not exist on the local webserver, it gets an id. since all imageservers share the same data, we can assign any imageserver
-				// with the best location to the user.
-				if ($chapter->server > 0) {
-					if (isset($user->md_at_home) && $user->md_at_home && stripos($chapter->page_order, 'http') === false) {
-						try {
-                            $subsubdomain = $mdAtHomeClient->getServerUrl($chapter->chapter_hash, explode(',', $chapter->page_order), _IP);
-							if (!empty($subsubdomain)) {
-                                $server_network = $subsubdomain;
-                            }
-						} catch (Throwable $t) {
-							trigger_error($t->getMessage(), E_USER_WARNING);
-						}
-					}
-                    $server_id = -1;
-                    // If a usersetting overwrites it, take this
-                    if (isset($_GET['server'])) {
-                        // if the parameter was trash, this returns -1
-                        $server_id = get_server_id_by_code($_GET['server']);
+                // use md@h for all images
+                try {
+                    $subsubdomain = $mdAtHomeClient->getServerUrl($chapter->chapter_hash, explode(',', $chapter->page_order), _IP, $user->mdh_portlimit ?? false);
+                    if (!empty($subsubdomain)) {
+                        $server_network = $subsubdomain;
                     }
-                    if ($server_id < 1) {
-                        // Try to select a region based server if we havent set one already
-                        $server_id = get_server_id_by_geography();
-                    }
-                    if ($server_id > 0) {
-                        $server_fallback = "https://s$server_id.mangadex.org";
-                    }
+				} catch (\Throwable $t) {
+                    trigger_error($t->getMessage(), E_USER_WARNING);
 				}
 
 				$server = $server_network ?: $server_fallback;
@@ -341,11 +323,16 @@ switch ($type) {
 				if (!empty($server_network)) {
 				    $array['server_fallback'] = $server_fallback.$data_dir;
                 }
+
+				$isRestricted = in_array($chapter->manga_id, RESTRICTED_MANGA_IDS) && !validate_level($user, 'contributor') && $user->get_chapters_read_count() < MINIMUM_CHAPTERS_READ_FOR_RESTRICTED_MANGA;
+				$countryCode = strtoupper(get_country_code($user->last_ip));
+				$isRegionBlocked = isset(REGION_BLOCKED_MANGA[$countryCode]) && in_array($manga->manga_id, REGION_BLOCKED_MANGA[$countryCode]) && !validate_level($user, 'pr');
+
 				if ($status === 'external') {
 					$array['external'] = $chapter->page_order;
 				}
 
-				elseif (in_array($chapter->manga_id, RESTRICTED_MANGA_IDS) && !validate_level($user, 'contributor') && $user->get_chapters_read_count() < MINIMUM_CHAPTERS_READ_FOR_RESTRICTED_MANGA) {
+				elseif ($isRestricted || $isRegionBlocked) {
 					$array = [
 						'id' => $chapter->chapter_id,
 						'status' => 'restricted',
@@ -432,7 +419,7 @@ SQL;
 			} else {
 				$limit = 200;
 				$offset = $limit * ((int) max(1, (int) min(50, $_GET['page'] ?? 1)) - 1);
-				
+
 				$follows = $user->get_followed_manga_ids_api();
 				foreach ($follows AS &$follow) {
 				    $follow['title'] = html_entity_decode($follow['title'] ?? '', null, 'UTF-8');

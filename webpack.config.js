@@ -5,7 +5,6 @@ const merge = require('webpack-merge')
 var config = {
   entry: {
     bundle: './scripts/js2/index.js',
-    //reader: './reader/index.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist', 'js'),
@@ -34,7 +33,7 @@ module.exports = (env, argv) => {
     config = merge(config, {
       mode: 'production',
       entry: {
-        polyfills: ['@babel/polyfill', 'url-polyfill', 'whatwg-fetch', 'eligrey-classlist-js-polyfill', 'polyfill-queryselector', 'formdata-polyfill', './scripts/js2/polyfills.js'],
+        polyfills: ['core-js', 'eligrey-classlist-js-polyfill', 'whatwg-fetch', 'formdata-polyfill'],
       },
       output: {
         filename: '[name].prod.js'
@@ -43,7 +42,6 @@ module.exports = (env, argv) => {
         rules: [
           {
             test: /\.m?js$/,
-            // include: [ path.resolve(__dirname, './reader') ],
             exclude: /node_modules/,
             use: {
               loader: 'babel-loader',

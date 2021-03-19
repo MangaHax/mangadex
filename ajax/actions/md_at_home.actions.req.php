@@ -25,10 +25,10 @@ switch ($function) {
 
 		if (!$user->user_id)
 			$error .= display_alert('danger', 'Failed', "Your session has timed out. Please log in again.");
-		elseif ($upload < 80)
-			$error .= display_alert('danger', 'Failed', "Your upload speed must be at least 80 Mbps.");
-		elseif ($download < 80)
-			$error .= display_alert('danger', 'Failed', "Your download speed must be at least 80 Mbps.");	
+		elseif ($upload < 40)
+			$error .= display_alert('danger', 'Failed', "Your upload speed must be at least 40 Mbps.");
+		elseif ($download < 40)
+			$error .= display_alert('danger', 'Failed', "Your download speed must be at least 40 Mbps.");	
 		elseif ($upload > 65535)
 			$error .= display_alert('danger', 'Failed', "Your upload speed is too high.");
 		elseif ($download > 65535)

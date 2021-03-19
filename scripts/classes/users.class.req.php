@@ -182,7 +182,7 @@ class User {
 			SELECT count(*)
 			FROM mangadex_pm_threads
 			WHERE (sender_id = ? AND sender_read = 0) OR (recipient_id = ? AND recipient_read = 0)
-			", [$this->user_id, $this->user_id], 'fetchColumn', '', -1);
+			", [$this->user_id, $this->user_id], 'fetchColumn', '', 60);
 	}
 
 	public function get_unread_notifications() {
@@ -190,7 +190,7 @@ class User {
 			SELECT count(*)
 			FROM mangadex_notifications
 			WHERE mentionee_user_id = ? AND is_read = 0
-			", [$this->user_id], 'fetchColumn', '');
+			", [$this->user_id], 'fetchColumn', '', 60);
 	}
 
 	public function get_groups() {
@@ -236,21 +236,19 @@ class User {
 			", [$this->user_id], 'fetchAll', PDO::FETCH_UNIQUE);	//contains progress tracker (volume and chapter)
 	}
 
-    public function get_manga_userdata($manga_id) { //contains progress data, title, and rating
-        return $this->sql->prep("user_{$this->user_id}_manga_{$manga_id}_api", "
-			SELECT m.manga_id, m.manga_name AS title, f.follow_type, f.volume, f.chapter, COALESCE(r.rating, 0) as rating
-			FROM mangadex_mangas m
-			LEFT JOIN mangadex_follow_user_manga f
-			ON m.manga_id = f.manga_id AND f.user_id = ?
-			LEFT JOIN mangadex_manga_ratings r
-			ON m.manga_id = r.manga_id AND r.user_id = ?
-			WHERE m.manga_id = ?
-			", [$this->user_id, $this->user_id, $manga_id], 'fetchAll', PDO::FETCH_ASSOC);
+	public function get_manga_userdata($manga_id) { //contains progress data, title, and rating
+		$follows = $this->get_followed_manga_ids_api();
+		foreach ($follows as $manga) {
+			if ($manga['manga_id'] == $manga_id) {
+				return $manga;
+			}
+		}
+		return null;
     }
 
     public function get_followed_manga_ids_api() { //contains progress data, title, and rating for all followed manga
         return $this->sql->prep("user_{$this->user_id}_followed_manga_ids_api", "
-			SELECT f.manga_id, m.manga_name AS title, f.follow_type, f.volume, f.chapter, COALESCE(r.rating, 0) as rating
+			SELECT f.manga_id, m.manga_name AS title, m.manga_hentai, m.manga_image, f.follow_type, f.volume, f.chapter, COALESCE(r.rating, 0) as rating
 			FROM mangadex_follow_user_manga f
 			JOIN mangadex_mangas m
 			ON m.manga_id = f.manga_id
@@ -330,7 +328,7 @@ class User {
 		return $this->sql->prep("user_{$this->user_id}_friends_user_ids", "
 			SELECT relations.target_user_id, relations.accepted, user.user_id, user.username, user.last_seen_timestamp, user.list_privacy, user_level.level_colour
 			FROM mangadex_user_relations AS relations
-			LEFT JOIN mangadex_users AS user
+			JOIN mangadex_users AS user
 				ON relations.target_user_id = user.user_id
 			LEFT JOIN mangadex_user_levels AS user_level
 				ON user.level_id = user_level.level_id
@@ -343,26 +341,26 @@ class User {
 		return $this->sql->prep("user_{$this->user_id}_pending_friends_user_ids", "
 			SELECT relations.user_id, user.user_id, user.username, user.last_seen_timestamp, user_level.level_colour
 			FROM mangadex_user_relations AS relations
-			LEFT JOIN mangadex_users AS user
+			JOIN mangadex_users AS user
 				ON relations.user_id = user.user_id
 			LEFT JOIN mangadex_user_levels AS user_level
 				ON user.level_id = user_level.level_id
 			WHERE relations.relation_id = 1 AND relations.accepted = 0 AND relations.target_user_id = ?
 			ORDER BY user.username ASC
-			", [$this->user_id], 'fetchAll', PDO::FETCH_UNIQUE);
+			", [$this->user_id], 'fetchAll', PDO::FETCH_UNIQUE, 60*60*24);
 	}
 
 	public function get_blocked_user_ids() {
 		return $this->sql->prep("user_{$this->user_id}_blocked_user_ids", "
 			SELECT relations.target_user_id, user.user_id, user.username, user_level.level_colour
 			FROM mangadex_user_relations AS relations
-			LEFT JOIN mangadex_users AS user
+			JOIN mangadex_users AS user
 				ON relations.target_user_id = user.user_id
 			LEFT JOIN mangadex_user_levels AS user_level
 				ON user.level_id = user_level.level_id
 			WHERE relations.relation_id = 0 AND relations.user_id = ? AND user.level_id < ?
 			ORDER BY user.username ASC
-			", [$this->user_id, 10 /** staff level: PR **/], 'fetchAll', PDO::FETCH_UNIQUE);
+			", [$this->user_id, 10 /** staff level: PR **/], 'fetchAll', PDO::FETCH_UNIQUE, 60*60*24);
 	}
 
 	public function get_active_restrictions() {
@@ -515,15 +513,18 @@ class PM_Threads {
 			FROM mangadex_pm_threads
 			WHERE (sender_id = ? AND sender_deleted = ?)
 				OR (recipient_id = ? AND recipient_deleted = ?)
-			ORDER BY thread_timestamp DESC LIMIT 20
 			", [$user_id, $deleted, $user_id, $deleted], 'fetchColumn', '', -1);
 
 		$this->user_id = $user_id;
 		$this->deleted = $deleted;
 	}
 
-	public function query_read() {
-		$results = $this->sql->prep("user_{$this->user_id}_PMs", "
+	public function query_read($page = 1, $limit = 100)
+	{
+		$offset = ($page - 1) * $limit;
+		$results = $this->sql->prep(
+			"user_{$this->user_id}_PMs",
+				"
 			SELECT threads.*,
 				sender.username AS sender_username,
 				recipient.username AS recipient_username,
@@ -541,8 +542,13 @@ class PM_Threads {
 			WHERE (threads.sender_id = ? AND threads.sender_deleted = ?)
 				OR (threads.recipient_id = ? AND threads.recipient_deleted = ?)
 			ORDER BY threads.thread_timestamp DESC
-			LIMIT 100
-			", [$this->user_id, $this->deleted, $this->user_id, $this->deleted], 'fetchAll', PDO::FETCH_ASSOC, -1);
+			LIMIT ? OFFSET ?
+			",
+			[$this->user_id, $this->deleted, $this->user_id, $this->deleted, $limit, $offset],
+			'fetchAll',
+			PDO::FETCH_ASSOC,
+			-1
+		);
 
 		//return get_results_as_object($results, 'thread_id');
         return $results;

@@ -8,7 +8,7 @@ class IndexController extends APIController
     {
         return [
             "information" => "Authentication is achieved by the same means as logging in to the site (i.e. the mangadex_session, mangadex_rememberme_token cookies, correct User-Agent). Some chapters may require authenticated permissions to access. The Content-Type header for requests with bodies must be application/json, and the content must be valid JSON. Boolean query values are evaluated 1/true/on/yes for true, otherwise false.",
-            "baseUrl" => URL . "api/v2",
+            "baseUrl" => defined('API_V2_URL') ? API_V2_URL : "https://api.mangadex.org/v2/",
             "resources" => [
                 "GET /" => [
                     "description" => "The current page, the API index.",
@@ -29,6 +29,7 @@ class IndexController extends APIController
                             "queryParameters" => [
                                 "p" => "(Optional) The current page of the paginated results, starting from 1. Integer, default disables pagination.",
                                 "limit" => "(Optional) The limit of the paginated results, allowed range 10 - 100. Integer, default 100.",
+                                "blockgroups" => "(Optional) Do not include chapters by groups blocked by the user. Boolean, default true.",
                             ],
                         ],
                         "GET /manga/{id}/covers" => [
@@ -61,6 +62,7 @@ class IndexController extends APIController
                             "queryParameters" => [
                                 "p" => "(Optional) The current page of the paginated results, starting from 1. Integer, default disables pagination.",
                                 "limit" => "(Optional) The limit of the paginated results, allowed range 10 - 100. Integer, default 100.",
+                                "blockgroups" => "(Optional) Do not include chapters by groups blocked by the user. Boolean, default true.",
                             ],
                         ],
                     ],
@@ -79,13 +81,18 @@ class IndexController extends APIController
                             "queryParameters" => [
                                 "p" => "(Optional) The current page of the paginated results, starting from 1. Integer, default disables pagination.",
                                 "limit" => "(Optional) The limit of the paginated results, allowed range 10 - 100. Integer, default 100.",
+                                "blockgroups" => "(Optional) Do not include chapters by groups blocked by the user. Boolean, default true.",
                             ],
                         ],
                         "GET /user/{id}/settings" => [
                             "description" => "(Authorization required) Get a user's website settings.",
                         ],
                         "GET /user/{id}/followed-manga" => [
-                            "description" => "(Authorization required) Get a user's followed manga and personal data for them.",
+                            "description" => "(Authorization required) Get a user's followed manga and personal data for them. The target user's MDList privacy setting is taken into account when determining authorization.",
+                            "queryParameters" => [
+                                "type" => "(Optional) Filter the results by the follow type ID (i.e. 1 = Reading, 2 = Completed etc). Use 0 to remove filtering. Integer, default 0.",
+                                "hentai" => "(Optional) Filter results based on whether the titles are marked as hentai. 0 = Hide H, 1 = Show all, 2 = Show H only. Integer, default 0.",
+                            ],
                         ],
                         "GET /user/{id}/followed-updates" => [
                             "description" => "(Authorization required) Get the latest uploaded chapters for the manga that the user has followed, as well as basic related manga information. Ordered by timestamp descending (the datetime when the chapter is available). Limit 100 chapters per page. Note that the results are automatically filtered by the authorized user's chapter language filter setting.",
@@ -94,6 +101,7 @@ class IndexController extends APIController
                                 "type" => "(Optional) Filter the results by the follow type ID (i.e. 1 = Reading, 2 = Completed etc). Use 0 to remove filtering. Integer, default 0.",
                                 "hentai" => "(Optional) Filter results based on whether the titles are marked as hentai. 0 = Hide H, 1 = Show all, 2 = Show H only. Integer, default 0.",
                                 "delayed" => "(Optional) Include delayed chapters in the results. Boolean, default false.",
+                                "blockgroups" => "(Optional) Do not include chapters by groups blocked by the user. Boolean, default true.",
                                 //"langs" => "(Optional) Filter results based on the scanlation language. Use a comma-separated list of language IDs.",
                             ],
                         ],

@@ -52,9 +52,9 @@ switch ($function) {
 		$id = prepare_numeric($_GET['id']);
 
 		if (validate_level($user, 'member') && $user->user_id != $id) {
-			$sql->modify('friend_accept', ' 
+			$sql->modify('friend_accept', '
 			INSERT INTO mangadex_user_relations (user_id, relation_id, target_user_id, accepted) VALUES (?, 1, ?, 1)
-				ON DUPLICATE KEY UPDATE accepted = 1 
+				ON DUPLICATE KEY UPDATE accepted = 1
 			', [$user->user_id, $id]);
 
 			$sql->modify('friend_accept', ' UPDATE mangadex_user_relations SET accepted = 1 WHERE user_id = ? AND relation_id = 1 AND target_user_id = ? LIMIT 1 ', [$id, $user->user_id]);
@@ -251,7 +251,7 @@ switch ($function) {
 	case 'supporter_settings':
 		$show_premium_badge = !empty($_POST['show_supporter_badge']) ? 1 : 0;
 		$show_mah_badge = !empty($_POST['show_mah_badge']) ? 1 : 0;
-		
+
 		if ($user->user_id) {
 			if ($user->premium) {
 				$sql->modify('supporter_settings', ' UPDATE mangadex_user_options SET show_premium_badge = ? WHERE user_id = ? LIMIT 1 ', [$show_premium_badge, $user->user_id]);
@@ -259,8 +259,8 @@ switch ($function) {
 			if (count($user->get_clients())) {
 				$approvaltime = $user->get_client_approval_time();
 				if ($show_mah_badge && $approvaltime < 1593561600) {
-					$show_mah_badge = 2;					
-				}				
+					$show_mah_badge = 2;
+				}
 				$sql->modify('supporter_settings', ' UPDATE mangadex_user_options SET show_md_at_home_badge = ? WHERE user_id = ? LIMIT 1 ', [$show_mah_badge, $user->user_id]);
 			}
 
@@ -298,6 +298,7 @@ switch ($function) {
 		$post_sensitivity = prepare_numeric($_POST['swipe_sensitivity']);
 		$reader_mode = prepare_numeric($_POST['reader_mode']) ?? 0;
 		$image_fit = prepare_numeric($_POST['image_fit']) ?? 0;
+		$data_saver = prepare_numeric($_POST['data_saver']) ?? 0;
 		$img_server = prepare_numeric($_POST['img_server']);
 		if ($reader_mode && $image_fit == 2)
 			$image_fit = 0;
@@ -309,9 +310,10 @@ switch ($function) {
 			$swipe_sensitivity = 150;
 
 		if ($user->user_id) {
-			$sql->modify('reader_settings', ' 
-			UPDATE mangadex_users SET reader = ?, swipe_direction = ?, swipe_sensitivity = ?, reader_mode = ?, reader_click = ?, image_fit = ?, img_server = ? WHERE user_id = ? LIMIT 1 
+			$sql->modify('reader_settings', '
+			UPDATE mangadex_users SET reader = ?, swipe_direction = ?, swipe_sensitivity = ?, reader_mode = ?, reader_click = ?, image_fit = ?, img_server = ? WHERE user_id = ? LIMIT 1
 			', [$reader, $swipe_direction, $swipe_sensitivity, $reader_mode, $reader_click, $image_fit, $img_server, $user->user_id]);
+			$sql->modify('reader_settings', ' UPDATE mangadex_user_options SET data_saver = ? WHERE user_id = ? LIMIT 1 ', [(int) $data_saver, $user->user_id]);
 
 			$memcached->delete("user_$user->user_id");
 		}
@@ -328,6 +330,7 @@ switch ($function) {
 		$website = str_replace(['javascript:'], '', htmlentities($_POST['website']));
 		$user_bio = str_replace(['javascript:'], '', htmlentities($_POST['user_bio']));
 		$old_file = $_FILES['file']['name'];
+		$email = $_POST['email'];
 
 		// Make sure website has http://
         if (!empty($website) && stripos($website, 'http://') === false && stripos($website, 'https://') === false)
@@ -351,14 +354,29 @@ switch ($function) {
             }
         }
 
+        if($email != $user->email){
+            // check for another account with this email
+            $count_email = $sql->prep('count_email', ' SELECT count(*) FROM mangadex_users WHERE email = ? ', [$email], 'fetchColumn', '', -1);
+
+            //check for banned hosts
+            $banned_hosts = $sql->query_read('tempmail', "SELECT host FROM mangadex_tempmail ORDER BY host ASC ", 'fetchAll', PDO::FETCH_COLUMN);
+            $email_parts = explode('@', $email);
+            $banned_email = in_array($email_parts[1], $banned_hosts);
+
+            if($count_email || $banned_email){
+                $fail_reason = "This email cannot be used.";
+                $error .= display_alert("danger", "Failed", $fail_reason);
+            }
+        }
+
 		if (!$user->user_id)
 			$error .= display_alert('danger', 'Failed', 'Your session has timed out. Please log in again.'); //success
-		
+
 		if (!validate_level($user, 'member'))
 			$error .= display_alert('danger', 'Failed', 'You need to be at least a member.'); //success
 
 		if (!$error) {
-			$sql->modify('change_profile', ' UPDATE mangadex_users SET language = ?, user_website = ?, user_bio = ? WHERE user_id = ? LIMIT 1 ', [$lang_id, $website, $user_bio, $user->user_id]);
+			$sql->modify('change_profile', ' UPDATE mangadex_users SET language = ?, user_website = ?, user_bio = ?, email = ? WHERE user_id = ? LIMIT 1 ', [$lang_id, $website, $user_bio, $email, $user->user_id]);
 
 			if ($old_file) {
 				$arr = explode('.', $_FILES['file']['name']);
@@ -399,8 +417,9 @@ switch ($function) {
 		$theme_id = prepare_numeric($_POST['theme_id']);
 		$navigation = prepare_numeric($_POST['navigation']);
 		$list_privacy = prepare_numeric($_POST['list_privacy']);
+		$dm_privacy = prepare_numeric($_POST['dm_privacy']);
 		$reader = $_POST['reader'] ?? 0;
-		$data_saver = $_POST['data_saver'] ?? 0;
+		$port_limit = prepare_numeric($_POST['mdh_portlimit'] ?? 0);
 		$display_lang_id = prepare_numeric($_POST['display_lang_id']);
 		$old_file = $_FILES['file']['name'];
 		$hentai_mode = prepare_numeric($_POST["hentai_mode"]);
@@ -417,17 +436,17 @@ switch ($function) {
 
 		if (!$user->user_id)
 			$error .= display_alert('danger', 'Failed', "Your session has timed out. Please log in again."); //success
-		
+
 		if (!validate_level($user, 'member'))
 			$error .= display_alert('danger', 'Failed', 'You need to be at least a member.'); //success
 
 		if (!$error) {
-			$sql->modify('site_settings', ' 
-			UPDATE mangadex_users SET hentai_mode = ?, display_moderated = ?, latest_updates = ?, reader = ?, default_lang_ids = ?, style = ?, display_lang_id = ?, list_privacy = ?, excluded_genres = ?, navigation = ?, show_unavailable = ? WHERE user_id = ? LIMIT 1 
-			', [$hentai_mode, $display_moderated, $latest_updates, (int) $reader, $default_lang_ids, $theme_id, $display_lang_id, $list_privacy, implode(',', $excluded_genres), $navigation, $show_unavailable, $user->user_id]);
-			
-			$sql->modify('site_settings', ' UPDATE mangadex_user_options SET data_saver = ? WHERE user_id = ? LIMIT 1 ', [(int) $data_saver, $user->user_id]);
-			
+			$sql->modify('site_settings', '
+			UPDATE mangadex_users SET hentai_mode = ?, display_moderated = ?, latest_updates = ?, reader = ?, default_lang_ids = ?, style = ?, display_lang_id = ?, list_privacy = ?, excluded_genres = ?, navigation = ?, dm_privacy = ?, show_unavailable = ? WHERE user_id = ? LIMIT 1
+			', [$hentai_mode, $display_moderated, $latest_updates, (int) $reader, $default_lang_ids, $theme_id, $display_lang_id, $list_privacy, implode(',', $excluded_genres), $navigation, $dm_privacy, $show_unavailable, $user->user_id]);
+
+			$sql->modify('site_settings', ' UPDATE mangadex_user_options SET mdh_portlimit = ? WHERE user_id = ? LIMIT 1 ', [$port_limit, $user->user_id]);
+
 			if ($old_file && !$reset_list_banner) {
 				$arr = explode(".", $_FILES["file"]["name"]);
 				$ext = strtolower(end($arr));
@@ -608,7 +627,7 @@ switch ($function) {
             //var_dump($target_user_id, $mod_user_id, $restriction_type_id, $expiration_timestamp, $comment);
 
             $sql->modify('user_restrictions_all_'.$target_user_id, '
-  INSERT INTO mangadex_user_restrictions 
+  INSERT INTO mangadex_user_restrictions
     (target_user_id, restriction_type_id, mod_user_id, expiration_timestamp, comment)
   VALUES
     (?, ?, ?, ?, ?)', [$target_user_id, $restriction_type_id, $mod_user_id, $expiration_timestamp, $comment]);
@@ -635,7 +654,7 @@ switch ($function) {
             //var_dump($restriction_id, $mod_user_id);
 
             $sql->modify('user_restrictions_all_'.$target_user_id, '
-  UPDATE mangadex_user_restrictions 
+  UPDATE mangadex_user_restrictions
   SET
     mod_user_id = ?,
     expiration_timestamp = ?
@@ -659,7 +678,7 @@ switch ($function) {
         } else {
             $user_id = prepare_numeric($_GET["id"]);
 
-            $posts = $sql->prep('posts_nuke_select', ' 
+            $posts = $sql->prep('posts_nuke_select', '
                 SELECT posts.post_id, posts.thread_id, threads.forum_id
                 FROM mangadex_forum_posts AS posts
                 LEFT JOIN mangadex_threads AS threads
@@ -667,7 +686,7 @@ switch ($function) {
                 WHERE posts.user_id = ? AND posts.deleted = 0
 			', [$user_id], 'fetchAll', PDO::FETCH_ASSOC, -1);
 
-            $sql->modify('posts_nuke_update', ' 
+            $sql->modify('posts_nuke_update', '
                 UPDATE mangadex_forum_posts AS posts
                 SET deleted = 1
                 WHERE posts.user_id = ?
@@ -737,8 +756,8 @@ switch ($function) {
             }
 
             if ($is_admin) {
-                $sql->modify('admin_edit_user', ' 
-			UPDATE mangadex_users SET username = ?, level_id = ?, email = ?, language = ?, avatar = ?, upload_group_id = ?, upload_lang_id = ?, user_bio = ?, user_website = ? WHERE user_id = ? 
+                $sql->modify('admin_edit_user', '
+			UPDATE mangadex_users SET username = ?, level_id = ?, email = ?, language = ?, avatar = ?, upload_group_id = ?, upload_lang_id = ?, user_bio = ?, user_website = ? WHERE user_id = ?
 			', [$username, $level_id, $email, $lang_id, $avatar, $upload_group_id, $upload_lang_id, $user_bio, $website, $id]);
 
 				if ($level_id == 0) {
@@ -752,8 +771,8 @@ switch ($function) {
                     $sql->modify('admin_edit_user', ' UPDATE mangadex_users SET password = ? WHERE user_id = ? LIMIT 1 ', [$password_hash, $id]);
                 }
             } else {
-                $sql->modify('admin_edit_user', ' 
-			UPDATE mangadex_users SET avatar = ?, user_bio = ?, user_website = ? WHERE user_id = ? 
+                $sql->modify('admin_edit_user', '
+			UPDATE mangadex_users SET avatar = ?, user_bio = ?, user_website = ? WHERE user_id = ?
 			', [$avatar, $user_bio, $website, $id]);
             }
 

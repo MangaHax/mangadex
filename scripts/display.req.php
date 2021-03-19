@@ -498,7 +498,7 @@ function display_manga_ext_links($links_array) {
                         case "bw":
                             $return .= "<li class='list-inline-item'><img src='" . LOCAL_SERVER_URL . "/images/misc/$type.png' /> <a rel='noopener noreferrer' target='_blank' href='https://bookwalker.jp/" . htmlspecialchars($id, ENT_QUOTES) . "/'>Bookwalker</a></li>";
                             break;
-							
+
 						case "al":
                             $return .= "<li class='list-inline-item'><img src='" . LOCAL_SERVER_URL . "/images/misc/$type.png' /> <a rel='noopener noreferrer' target='_blank' href='https://anilist.co/manga/" . htmlspecialchars($id, ENT_QUOTES) . "/'>AniList</a></li>";
                             break;
@@ -510,7 +510,7 @@ function display_manga_ext_links($links_array) {
                         case 'ap':
                             $return .= "<li class='list-inline-item'><img src='" . LOCAL_SERVER_URL . "/images/misc/$type.png' /> <a rel='noopener noreferrer' target='_blank' href='https://www.anime-planet.com/manga/" . htmlspecialchars($id, ENT_QUOTES). "'>Anime-Planet</a></li>";
                             break;
-							
+
                         case 'dj':
                             $return .= "<li class='list-inline-item'><img src='" . LOCAL_SERVER_URL . "/images/misc/$type.png' /> <a rel='noopener noreferrer' target='_blank' href='https://www.doujinshi.org/book/" . htmlspecialchars($id, ENT_QUOTES). "'>Doujinshi.org</a></li>";
                             break;
@@ -527,12 +527,6 @@ function display_manga_ext_links($links_array) {
 
 		return $return;
 	}
-}
-
-function display_manga_logo_link($manga) {
-	return "<a alt='Manga $manga->manga_id' title='$manga->manga_name' href='/title/$manga->manga_id/" . slugify($manga->manga_name) . "'>
-		<img class='rounded' src='" . IMG_SERVER_URL . "/images/manga/$manga->manga_id.thumb.jpg' alt='Manga image' />
-		</a>";
 }
 
 function display_js_posting() {
@@ -640,7 +634,7 @@ function display_forum($forum, $user) {
 		$return = "
 		<div class='d-flex row m-0 py-1 border-bottom align-items-center'>
 			<div class='col-auto px-2 ' >
-				<a href='/forum/$forum->forum_id'><img src='" . LOCAL_SERVER_URL . "/images/forums/$forum->forum_name.svg' width='70px' ></a>
+				<a href='/forum/$forum->forum_id'><img src='" . LOCAL_SERVER_URL . "/images/forums/" . str_replace(' ', '-', $forum->forum_name) . ".svg' width='70px' ></a>
 			</div>
 			<div class='col p-0 text-truncate'>
 				<div class='row m-2'>
@@ -983,13 +977,13 @@ function display_user_link_v2($user, $note = '') {
 	$levelClassname = str_replace(' ', '', ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $user->level_name ?? 'guest')), '_'));
 
 	$string = "<a class='user_level_$levelClassname' style='color: #$user->level_colour; ' href='/user/$user->user_id/" . strtolower($user->username) . "'>$user->username</a>";
-	
+
 	if ($user->show_premium_badge ?? false)
 		$string .= " <a href='/support'>" . display_fa_icon('gem', 'Supporter', '', 'far') . "</a>";
-	
+
 	if ($user->show_md_at_home_badge ?? false)
 		$string .= " <a href='/md_at_home'>" . display_fa_icon('network-wired', 'MD@H Host', '', 'fas' . ($user->show_md_at_home_badge == 2 ? ' text-warning' : '')) . "</a>";
-	
+
 	if ($user->is_thread_starter ?? false)
 	    $string .= " <span class='badge badge-primary'>OP</span>";
 	if ($note)
@@ -1517,6 +1511,12 @@ function display_lock_manga($user, $manga) {
 			return "<button class='btn btn-warning' id='manga_unlock_button'>" . display_fa_icon('lock-open', 'Unlock') . " <span class='d-none d-xl-inline'>Unlock</span></button>";
 		else
 			return "<button class='btn btn-warning' id='manga_lock_button'>" . display_fa_icon('lock', 'Lock') . " <span class='d-none d-xl-inline'>Lock</span></button>";
+	}
+}
+
+function display_regenerate_manga_thumb($user) {
+	if (validate_level($user, 'mod')) {
+		return "<button class='btn btn-info' id='manga_regenerate_thumb_button'>" . display_fa_icon('sync', 'Regenerate thumb') . " <span class='d-none d-xl-inline'>Regenerate thumb</span></button>";
 	}
 }
 

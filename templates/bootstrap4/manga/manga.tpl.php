@@ -187,6 +187,7 @@ $links_array = ($templateVar['manga']->manga_links) ? json_decode($templateVar['
 					<div class="col-lg-3 col-xl-2 strong">Mod:</div>
 					<div class="col-lg-9 col-xl-10">
 						<?= display_lock_manga($templateVar['user'], $templateVar['manga']) ?>
+						<?= display_regenerate_manga_thumb($templateVar['user']) ?>
 						<?= display_delete_manga($templateVar['user']) ?>
 					</div>
 				</div>

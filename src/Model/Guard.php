@@ -75,6 +75,10 @@ class Guard
 			$check = $this->sql->prep('user_rememberme_check', 'SELECT user_id, region_data FROM mangadex_sessions WHERE session_token = ? AND created > UNIX_TIMESTAMP() - ?',
 				[$rememberMeToken, SESSION_REMEMBERME_TIMEOUT], 'fetch', \PDO::FETCH_ASSOC, -1);
 
+			if (!$check) {
+			    return;
+            }
+
 			$tokenRegionData = json_decode($check['region_data'], 1);
 			$userRegionData = $this->getClientDetails();
 
@@ -142,7 +146,7 @@ class Guard
 			$sessionInfo['updated'] = time();
 			$sessionInfo['ip'] = _IP;
 
-			$this->memcached->set('session:'.$sessionId, $sessionInfo, time() + SESSION_TIMEOUT);
+			$this->memcached->setSynced('session:'.$sessionId, $sessionInfo, time() + SESSION_TIMEOUT);
 			setcookie(SESSION_COOKIE_NAME,
 				$sessionId,
 				time() + SESSION_TIMEOUT,
@@ -169,7 +173,7 @@ class Guard
                         $sessionInfo['userid']
                     ]
                 );
-				$this->memcached->set("user_{$sessionInfo['userid']}_lastseen", 1, 60);
+				$this->memcached->setSynced("user_{$sessionInfo['userid']}_lastseen", 1, 60);
             }
 		} else {
 			// No session found? It could've been kicked out of memcached. Lets destroy the session cookie
@@ -196,7 +200,7 @@ class Guard
 			'userid' => (int)$userId,
 			'is_rememberme' => $isRemembermeSession,
 		];
-		$this->memcached->set('session:'.$sessionId, $sessionInfo, time() + SESSION_TIMEOUT);
+		$this->memcached->setSynced('session:'.$sessionId, $sessionInfo, time() + SESSION_TIMEOUT);
 		setcookie(SESSION_COOKIE_NAME,
 			$sessionId,
 			time() + SESSION_TIMEOUT,
@@ -249,6 +253,9 @@ class Guard
 	public function verifyUserCredentials($userId, $rawPassword)
 	{
 		$user = $this->getUser($userId);
+		if (!$user) {
+		    return false;
+        }
 		return password_verify($rawPassword, $user->password);
 	}
 

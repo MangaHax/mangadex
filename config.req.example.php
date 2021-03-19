@@ -8,6 +8,7 @@ define('DB_USER', 'mangadex');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'mangadex');
 define('DB_HOST', 'localhost');
+define('DB_PERSISTENT', false);
 
 define('DB_READ_HOSTS', ['127.0.0.1']);
 define('DB_READ_NAME', DB_NAME);
@@ -29,6 +30,8 @@ define('URL', 'https://mangadex.org/');
 define('TITLE', 'MangaDex');
 define('DESCRIPTION', 'Read manga online for free at MangaDex with no ads, high quality images and support scanlation groups!');
 define('MEMCACHED_HOST', '127.0.0.1');
+define('MEMCACHED_SYNC_HOST', null);
+define('MEMCACHED_SYNC_PORT', null);
 
 define('GOOGLE_CAPTCHA_SITEKEY', 'xxx');
 define('GOOGLE_CAPTCHA_SECRET', 'xxx');
@@ -60,6 +63,7 @@ define('GOOGLE_SERVICE_ACCOUNT_PATH', '/var/www/google_service_credentials.json'
 define('MAX_CHAPTER_FILESIZE', 104857600); //100*1024*1024
 
 define('DMS_DISPLAY_LIMIT', 25);
+define('PRIVATE_API_KEY', sha1('secretpass_changeme'));
 
 define('REQUIRE_LOGIN_PAGES', ['users', 'follows', 'followed_manga', 'followed_groups', 'follows_import', 'upload', 'settings', 'messages', 'message', 'send_message', 'activation', 'admin', 'mod', 'group_new', 'manga_new', 'stats', 'social']);
 
@@ -90,8 +94,9 @@ define('MAX_IMAGE_FILESIZE', 1048576);
 define('ALLOWED_IMG_EXT', ['jpg', 'jpeg', 'png', 'gif']);
 define('ALLOWED_MIME_TYPES', ['image/png', 'image/jpeg', 'image/gif']);
 define('IMAGE_SERVER', 0);
-define('IMG_SERVER_URL', 'https://s1.mangadex.org');
+define('IMG_SERVER_URL', 'https://s2.mangadex.org');
 define('LOCAL_SERVER_URL', 'https://cdndex.com/data/');
+define('API_V2_URL', 'https://api.mangadex.org/v2/');
 
 //$server_array = ['eu2' => 1, 'na' => 2, 'eu' => 3, 'na2' => 4, 'na3' => 5];
 define('IMAGE_SERVER_INFO', [

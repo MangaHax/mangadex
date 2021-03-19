@@ -3,13 +3,13 @@
 	<div class="form-group row">
 		<label for="upload" class="col-md-6 col-lg-4 col-xl-3 col-form-label">Upload speed allocated (Mbps):</label>
 		<div class="col-md-6 col-lg-8 col-xl-9">
-			<input type="number" class="form-control" id="upload" name="upload" value="" placeholder="Min: 80 Mbps (NOT your max connection speed, but the speed you want to use)" required>
+			<input type="number" class="form-control" id="upload" name="upload" value="" placeholder="Min: 40 Mbps (NOT your max connection speed, but the speed you want to use)" required>
 		</div>
 	</div>
 	<div class="form-group row">
 		<label for="download" class="col-md-6 col-lg-4 col-xl-3 col-form-label">Download speed allocated (Mbps):</label>
 		<div class="col-md-6 col-lg-8 col-xl-9">
-			<input type="number" class="form-control" id="download" name="download" value="" placeholder="Min: 80 Mbps (NOT your max connection speed, but the speed you want to use)" required>
+			<input type="number" class="form-control" id="download" name="download" value="" placeholder="Min: 40 Mbps (NOT your max connection speed, but the speed you want to use)" required>
 		</div>
 	</div>
 	<div class="form-group row">

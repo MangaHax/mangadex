@@ -11,7 +11,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-
+    <?= parse_template('ads/mobile_app_ad', $templateVar['banners']) ?>
         <div class="card mb-3">
             <h6 class="card-header text-center"><?= display_fa_icon('external-link-alt') ?> <a href="/updates">Latest updates</a></h6>
             <div class="card-header p-0">

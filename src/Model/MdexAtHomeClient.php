@@ -5,22 +5,46 @@ namespace Mangadex\Model;
 class MdexAtHomeClient
 {
 
-    public function getServerUrl(string $chapterHash, array $chapterPages, string $ip): string
+    public function getServerUrl(string $chapterHash, array $chapterPages, string $ip, bool $onlySsl): string
     {
         $path = '/assign';
         $payload = [
             'ip' => $ip,
             'hash' => $chapterHash,
             'images' => $chapterPages,
+            'only_443' => $onlySsl,
         ];
 
         $ch = $this->getCurl($path, $ip.$chapterHash.implode($chapterPages), $payload);
 
+        return $this->queryAssign($ch, $payload);
+    }
+
+    public function getClientUrl(string $chapterHash, array $chapterPages, string $ip, string $clientId): string
+    {
+        $path = '/assign';
+        $payload = [
+            'ip' => $ip,
+            'hash' => $chapterHash,
+            'images' => $chapterPages,
+            'client_id' => $clientId,
+        ];
+
+        $ch = $this->getCurl($path, $ip.$chapterHash.implode($chapterPages), $payload);
+
+        return $this->queryAssign($ch, $payload);
+    }
+
+    private function queryAssign($ch, $payload): string
+    {
         $res = curl_exec($ch);
-        curl_close($ch);
         if ($res === false) {
-            throw new \RuntimeException('MD@H::getServerUrl curl error: '.curl_error($ch));
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new \RuntimeException('MD@H::getServerUrl curl error: '.$error);
         }
+        curl_close($ch);
+
         $dec = \json_decode($res, true);
         if (!$dec) {
             throw new \RuntimeException('MD@H::getServerUrl failed to decode: '.$res);

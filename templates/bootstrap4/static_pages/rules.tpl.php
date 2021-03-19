@@ -59,7 +59,7 @@
                 </ol>
             </li>
             <li>Chapters from groups linking to group sites which adopt excessive profiteering techniques are not allowed. Examples include (but are not limited to) adblocker-blockers, pop-ups and pop-unders.</li>
-			<li>Uploading a scanlated chapter before the official raw chapter is released in the original country is prohibited, unless an appropriate delay is used.</li>
+            <li>Uploading a scanlated chapter before the official raw chapter is released in the original country is prohibited, unless an appropriate delay is used.</li>
         </ol>
     </li>
     <li id="upload">Upload Guidelines
@@ -79,7 +79,12 @@
                     <li>Obtrusive watermarks are not allowed.</li>
                     <li>Always upload releases from the highest possible quality source, which is usually the scanlator's website. Do not upload highly compressed and watermarked releases from aggregators, unless there is absolutely no other option.</li>
                     <li>Only partially uploading releases with the intention to lure users to your site for the other chapters is not allowed. Either upload all chapters, or don't upload any.</li>
-					<li>Adding extra page(s) to chapters for the purpose of crediting scanlators or translation notes is generally OK. Extra pages which contain extraneous political content, agendas, propaganda, commentary, race-baiting or content that could be construed as offensive may be removed by staff. Extra pages are also subject to the same standards as listed out in section 5.1.</li>
+                    <li>All content that isn't strictly part of the original scanlated chapter is considered "extraneous". Examples of this include credits pages, recruitment notices, discussion, fan-colored chapter pages, and other fan art. Extraneous content is generally allowed, but should be placed either to (or very near) the beginning or the end of the release.
+                        <ol>
+                            <li>Extraneous pages containing political content (such as agendas, propaganda, or commentary), race-baiting, or content that that can reasonably be construed as offensive may be removed by staff. They are also subject to the same standards as listed out in section 5.1.</li>
+                            <li>If one or more pages of a chapter are <i>entirely replaced</i> by fan-colored versions of the same pages, those chapters must belong to a title entry denoted by "(Fan-Colored)" appended to its name, in which case these pages are not considered extraneous. Otherwise, any fan-colored pages must be considered extraneous and the non-colored pages must be included.</li>
+                        </ol>
+                    </li>
                 </ol>
             </li>
             <li>Groups
@@ -115,16 +120,16 @@
     </li>
     <li id="comments">Comments and Forums
         <ol>
-			<li>Disagreements can and will happen. However, we ask all users avoid the following:
-				<ol> 
-					<li>Racism: With the exception of a serious historical discussion, there is never a context in which racist language is acceptable on MangaDex. This extends to profile biographies, user names, group banners, and user avatars.</li>
-					<li>Sexism: One gender is not inherently superior to another. Harassing someone solely on the basis of gender is not acceptable on MangaDex. This extends to profile biographies, user names, group banners, and user avatars.</li>
-					<li>Religious Discrimination: All members of all religions are equally deserving of respect. Insulting someone solely on the basis of their religion or slandering a specific religion is not acceptable on MangaDex. This extends to profile biographies, usernames, group banners, and user avatars.</li>
-					<li>Other Terminology: This category includes everything else that does not neatly fit under the above categories. It includes, but is not limited to, rape jokes, homophobia, transphobia, and direct personal attacks.</li>
-					<li>Direct Personal Attacks: We encourage intelligent, thoughtful discussion on MangaDex. We encourage users to criticize the content of a post and not the poster themselves. This particular violation will be taken on a case by case basis since context and severity of the violation is important when a mod is considering taking action. For example, calling someone an idiot and offering evidence why they're an idiot will most likely not result in moderator action. Calling someone an idiot and doing nothing else will result in moderator action, not because you called someone an idiot, but because it was the sole content of your post. Note that especially egregious foul language may or may not result in moderator action.</li>
-					<li>If you must disagree with someone, we prefer that you take your arguments into a private conversation so as not to derail a thread. If you cannot argue amicably, consider using the Block function, which can be found on every user's profile page. Blocking someone prevents you from seeing all of their messages on MangaDex.</li>
-				</ol>
-			</li>
+            <li>Disagreements can and will happen. However, we ask all users avoid the following:
+                <ol>
+                    <li>Racism: With the exception of a serious historical discussion, there is never a context in which racist language is acceptable on MangaDex. This extends to profile biographies, user names, group banners, and user avatars.</li>
+                    <li>Sexism: One gender is not inherently superior to another. Harassing someone solely on the basis of gender is not acceptable on MangaDex. This extends to profile biographies, user names, group banners, and user avatars.</li>
+                    <li>Religious Discrimination: All members of all religions are equally deserving of respect. Insulting someone solely on the basis of their religion or slandering a specific religion is not acceptable on MangaDex. This extends to profile biographies, usernames, group banners, and user avatars.</li>
+                    <li>Other Terminology: This category includes everything else that does not neatly fit under the above categories. It includes, but is not limited to, rape jokes, homophobia, transphobia, and direct personal attacks.</li>
+                    <li>Direct Personal Attacks: We encourage intelligent, thoughtful discussion on MangaDex. We encourage users to criticize the content of a post and not the poster themselves. This particular violation will be taken on a case by case basis since context and severity of the violation is important when a mod is considering taking action. For example, calling someone an idiot and offering evidence why they're an idiot will most likely not result in moderator action. Calling someone an idiot and doing nothing else will result in moderator action, not because you called someone an idiot, but because it was the sole content of your post. Note that especially egregious foul language may or may not result in moderator action.</li>
+                    <li>If you must disagree with someone, we prefer that you take your arguments into a private conversation so as not to derail a thread. If you cannot argue amicably, consider using the Block function, which can be found on every user's profile page. Blocking someone prevents you from seeing all of their messages on MangaDex.</li>
+                </ol>
+            </li>
             <li>Don't Be Disruptive
                 <ol>
                     <li>Keep your posts on topic.</li>
@@ -148,7 +153,7 @@
                     <li>Spoilers belong in spoiler tags.</li>
                     <li>Linking to external sites via advertising redirects is not allowed.</li>
                     <li>No unsolicited advertisements of products or commercial services via the site in any way, including (but not limited to) group pages, title pages, user pages, comments, posts or private messages.</li>
-					<li>A group that has opted out of using MangaDex to distribute their content must opt out in its entirety, including (but not limited to) linking to their website in comments and using any of our channels for recruitment.</li>
+                    <li>A group that has opted out of using MangaDex to distribute their content must opt out in its entirety, including (but not limited to) linking to their website in comments and using any of our channels for recruitment.</li>
                 </ol>
             </li>
             <li>Appealing a Moderator's Action

@@ -1,4 +1,7 @@
 <?php
+
+use Mangadex\Model\MdexAtHomeClient;
+
 $section = $_GET['section'] ?? 'info';
 
 $approvaltime = $user->get_client_approval_time();
@@ -39,7 +42,9 @@ switch ($section) {
 			'user' => $user, 
 			'section' => $section,
 			'user_clients' => $user->get_clients(), 
-			'approvaltime' => $approvaltime, 
+			'approvaltime' => $approvaltime,
+            'ip' => _IP,
+            'backend' => new MdexAtHomeClient(),
 		];
 		
 		if (validate_level($user, 'member')) {
@@ -53,8 +58,10 @@ switch ($section) {
 		$templateVars = [
 			'user' => $user, 
 			'section' => $section,
-			'clients' => $clients, 
-		];
+			'clients' => $clients,
+            'ip' => _IP,
+            'backend' => new MdexAtHomeClient(),
+        ];
 		
 		if (validate_level($user, 'admin')) {
 			$tab_html = parse_template('md_at_home/partials/admin', $templateVars);

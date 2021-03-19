@@ -1,7 +1,7 @@
 <?php if (!$templateVar['user']->user_id) : ?>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 
-    <?= display_alert('info', 'Notice', "You might experience difficulties receiving emails if you use hotmail. Email mangadexstaff@gmail.com with your username in that case.<br />Clear your MangaDex cookies <strong>from all time</strong> by clicking <strong><a href='/login?clear_cookies=1'>this link</a></strong> if you have trouble logging in.") ?>
+    <?= display_alert('info', 'Notice', "Clear your MangaDex cookies <strong>from all time</strong> by clicking <strong><a href='/login?clear_cookies=1'>this link</a></strong> if you have trouble logging in.") ?>
 
     <?php
     if (isset($_GET['msg'])) {
@@ -26,36 +26,58 @@
     ?>
 
     <!-- login_container -->
-    <div class="mx-auto form-narrow" id="login_container">
-        <form method="post" id="login_form" action="/ajax/actions.ajax.php?function=login&nojs=1">
-            <h1 class="text-center">Login</h1>
-            <hr>
-            <div class="form-group">
-                <label for="login_username" class="sr-only">Username</label>
-                <input autofocus tabindex="1" type="text" name="login_username" id="login_username" class="form-control" placeholder="Username" required>
+    <div class="container" id="login_container">
+        <div class="row justify-content-md-center">
+            <div class="col col-md-auto">
+                <form method="post" id="login_form" action="/ajax/actions.ajax.php?function=login&nojs=1">
+                    <h1 class="text-center">Login</h1>
+                    <hr>
+                    <div class="form-group">
+                        <label for="login_username" class="sr-only">Username</label>
+                        <input autofocus tabindex="1" type="text" name="login_username" id="login_username" class="form-control" placeholder="Username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login_password" class="sr-only">Password</label>
+                        <input tabindex="2" type="password" name="login_password" id="login_password" class="form-control" placeholder="Password" required>
+                    </div>
+
+                    <div id="2fa_field" class="form-group<?= isset($_GET['msg']) && ($_GET['msg'] === 'missing_2fa' || $_GET['msg'] === 'failed_2fa') ? '' : ' d-none' ?>">
+                        <label for="two_factor" class="sr-only">2-Factor-Authentication</label>
+                        <input tabindex="3" type="text" name="two_factor" id="two_factor" class="form-control" placeholder="2FA Code" autocomplete="off" data-lpignore="true">
+                    </div>
+
+                    <div class="form-group">
+                        <input tabindex="4" type="checkbox" class="" id="remember_me" name="remember_me" value="1">
+                        <label class="" for="remember_me">Remember me (1 year)</label>
+                    </div>
+
+                    <button tabindex="5" class="btn btn-lg btn-success btn-block" type="submit" id="login_button"><?= display_fa_icon('sign-in-alt') ?> Login</button>
+
+                    <a tabindex="6" href="#" class="btn btn-lg btn-warning btn-block" id="forgot_button"><?= display_fa_icon('sync') ?> Reset password</a>
+
+                    <a tabindex="7" href="/signup" class="btn btn-lg btn-info btn-block" id="signup_button"><?= display_fa_icon('pencil-alt') ?> Sign up</a>
+                </form>
             </div>
+            <div class="col col-md-5 text-wrap mt-3">
+                <h5>Activation Code/Password Reset Problems:</h5>
+                Contact <a href="mailto:mangadexstaff@gmail.com">mangadexstaff@gmail.com</a> for assistance, but include your <b>username</b> and the <b>email</b> you registered with. If you want your email changed, send it from the one currently on the account, not the one you want it changed to.<br><br>
+                These hosts usually don't receive it or it goes to spam:
+                <ul>
+                    <li>school related emails</li>
+                    <li>work related emails</li>
+                    <li>hotmail.com</li>
+                    <li>outlook.com</li>
+                    <li>o2.pl</li>
+                </ul>
 
-            <div class="form-group">
-                <label for="login_password" class="sr-only">Password</label>
-                <input tabindex="2" type="password" name="login_password" id="login_password" class="form-control" placeholder="Password" required>
+                Your email quota was hit, you can send but can't receive emails, meaning we can't help you, typically occurs with:
+                <ul>
+                    <li><a href="https://support.google.com/mail/answer/6374270">gmail.com</a></li>
+                    <li><a href="https://support.apple.com/en-us/HT202305">icloud.com</a></li>
+                </ul>
             </div>
-
-            <div id="2fa_field" class="form-group<?= isset($_GET['msg']) && ($_GET['msg'] === 'missing_2fa' || $_GET['msg'] === 'failed_2fa') ? '' : ' d-none' ?>">
-                <label for="two_factor" class="sr-only">2-Factor-Authentication</label>
-                <input tabindex="3" type="text" name="two_factor" id="two_factor" class="form-control" placeholder="2FA Code" autocomplete="off" data-lpignore="true">
-            </div>
-
-            <div class="form-group">
-                <input tabindex="4" type="checkbox" class="" id="remember_me" name="remember_me" value="1">
-                <label class="" for="remember_me">Remember me (1 year)</label>
-            </div>
-
-            <button tabindex="5" class="btn btn-lg btn-success btn-block" type="submit" id="login_button"><?= display_fa_icon('sign-in-alt') ?> Login</button>
-
-            <a tabindex="6" href="#" class="btn btn-lg btn-warning btn-block" id="forgot_button"><?= display_fa_icon('sync') ?> Reset password</a>
-			
-            <a tabindex="7" href="/signup" class="btn btn-lg btn-info btn-block" id="signup_button"><?= display_fa_icon('pencil-alt') ?> Sign up</a>
-        </form>
+        </div>
     </div>
 
     <!-- forgot_container -->

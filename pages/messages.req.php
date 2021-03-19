@@ -34,13 +34,20 @@ switch ($mode) {
     default:
         $deleted = ($mode == 'bin') ? 1 : 0;
 
+        $current_page = (isset($_GET['p']) && $_GET['p'] > 0) ? $_GET['p'] : 1;
+        $limit = 100;
+
         $threads = new PM_Threads($user->user_id, $deleted);
-        $threads_obj = $threads->query_read();
+        $threads_obj = $threads->query_read($current_page, $limit);
 
         if ($threads->num_rows < 1) {
-            $messages_tab_html = parse_template('partials/alert', ['type' => 'info', 'strong' => 'Notice', 'text' => 'You have no messages']);
+            $messages_tab_html = parse_template('partials/alert', ['type' => 'info', 'strong' => 'Notice', 'text' => 'There are no messages.']);
         } else {
             $templateVars = [
+                'thread_count' => $threads->num_rows,
+                'current_page' => $current_page,
+                'mode' => $mode,
+                'limit' => $limit,
                 'threads' => $threads_obj,
                 'user' => $user,
                 'deleted' => $deleted,

@@ -1,16 +1,21 @@
 <!-- reader controls -->
 <div class="container reader-controls-container p-0">
     <div class="reader-controls-wrapper bg-reader-controls row no-gutters flex-nowrap" style="z-index:1">
-        <div id="reader-controls-collapser" class="d-none d-lg-flex col-auto justify-content-center align-items-center cursor-pointer">
+        <div id="reader-controls-collapser-bar" class="reader-controls-collapser col-auto align-items-center justify-content-center cursor-pointer">
             <span class="fas fa-caret-right fa-fw arrow-link" aria-hidden="true" title="Collapse menu"></span>
         </div>
         <div class="reader-controls col row no-gutters flex-column flex-nowrap">
-            <div class="reader-controls-title col-auto text-center p-2">
-                <div style="font-size:1.25em">
-                    <span class="rounded flag"></span>
-                    <a class="manga-link" data-action="url"></a>
-                    <span class="chapter-tag-h badge badge-danger d-none">H</span>
-                    <span class="chapter-tag-doujinshi badge badge-primary d-none" style="background-color:#735ea5">Dj</span>
+            <div class="reader-controls-title col-auto text-center px-2 pb-2">
+                <div class="row no-gutters">
+                    <div id="reader-controls-collapser-button" class="reader-controls-collapser col-auto justify-content-center cursor-pointer">
+                        <span class="fas fa-caret-right fa-fw arrow-link" aria-hidden="true" title="Collapse menu"></span>
+                    </div>
+                    <div class="col pt-2 manga-title-col" style="font-size:1.25em">
+                        <span class="rounded flag"></span>
+                        <a class="manga-link" data-action="url"></a>
+                        <span class="chapter-tag-h badge badge-danger d-none">H</span>
+                        <span class="chapter-tag-doujinshi badge badge-primary d-none" style="background-color:#735ea5">Dj</span>
+                    </div>
                 </div>
                 <div class="d-none d-lg-block"><span class="chapter-title" data-chapter-id=""></span> <span class="chapter-tag-end badge badge-primary d-none">END</span></div>
             </div>
@@ -37,10 +42,13 @@
             <div class="reader-controls-unsupported col-auto row no-gutters p-2 text-danger d-none"></div>
             <div class="reader-controls-actions col-auto row no-gutters p-1">
                 <div class="col row no-gutters" style="min-width:120px;">
-                    <a title="Reader settings" class="btn btn-secondary col m-1" role="button" id="settings-button" data-toggle="modal" data-target="#modal-settings">
-                        <span class="fas fa-cog fa-fw"></span><span class="d-none d-lg-inline"> Settings</span>
+                    <a title="Reader settings" class="btn btn-secondary col m-1 px-1" role="button" id="settings-button" data-toggle="modal" data-target="#modal-settings">
+                        <span class="fas fa-cog fa-fw"></span> Reader settings
                     </a>
-                    <div class="w-100 d-none d-lg-block"></div>
+                    <a title="Recommendations" class="btn btn-secondary col m-1 px-1 d-none" role="button" id="recommendations-button">
+                        <span class="fas fa-thumbs-up fa-fw"></span> Recommendations
+                    </a>
+                    <div class="w-100 d-block d-lg-block"></div>
                     <a title="Hide header" class="btn btn-secondary col m-1" role="button" id="hide-header-button">
                         <span class="far fa-window-maximize fa-fw"></span>
                     </a>
@@ -53,6 +61,7 @@
                     <a title="Report" class="btn btn-secondary col m-1" role="button" id="report-button" data-toggle="modal" data-target="#modal-report">
                         <span class="fas fa-flag fa-fw"></span>
                     </a>
+                    <div class="w-100 d-block d-lg-block"></div>
                 </div>
             </div>
             <div class="reader-controls-mode col-auto d-lg-flex d-none flex-column align-items-start" style="flex:0 1 auto; overflow:hidden;">
@@ -79,19 +88,21 @@
                     <span class="direction-ltr">Left to right</span>
                     <span class="direction-rtl">Right to left</span> -->
                     <span class="show-direction-ltr">
-            <span class="fas fa-long-arrow-alt-right fa-fw" aria-hidden="true" title="Direction"></span> Left to right
-          </span>
+                        <span class="fas fa-long-arrow-alt-right fa-fw" aria-hidden="true" title="Direction"></span> Left to right
+                    </span>
                     <span class="show-direction-rtl">
-            <span class="fas fa-long-arrow-alt-left fa-fw" aria-hidden="true" title="Direction"></span> Right to left
-          </span>
+                        <span class="fas fa-long-arrow-alt-left fa-fw" aria-hidden="true" title="Direction"></span> Right to left
+                    </span>
                 </div>
             </div>
             <div class="reader-controls-footer col-auto mt-auto d-none d-lg-flex justify-content-center" style="flex:0 1 auto; overflow:hidden;">
                 <div class="text-muted text-center text-truncate row flex-wrap justify-content-center p-2 no-gutters">
-                    <span class="col-auto">©2020</span>
-                    <a href="/" class="col-auto mx-2">MangaDex</a>
-                    <a href="https://path.net/" target="_blank" title="Provider of DDoS mitigation services" class="col-auto mx-2">Path Network</a>
-                    <a href="https://sdbx.moe/" target="_blank" title="Seedbox provider" class="col-auto">sdbx.moe</a>
+                    <span class="col-auto mx-1">©2021</span>
+                    <a href="/" class="col-auto mx-1">MangaDex</a>
+                    <a href="https://path.net/" target="_blank" title="Provider of DDoS mitigation services" class="col-auto mx-1">Path Network</a>
+                    <a href="https://sdbx.moe/" target="_blank" title="Seedbox provider" class="col-auto mx-1">sdbx.moe</a>
+                    <a href="https://ddos-guard.net?affiliate=119953" target="_blank" title="Provider of DDoS mitigation services" class="col-auto mx-1">DDoS Protection by DDoS-GUARD</a>
+                    <a href="https://onramper.com/" target="_blank" title="Crypto Widget">Onramper</a>
                 </div>
             </div>
             <div class="reader-controls-pages col-auto d-none d-lg-flex row no-gutters align-items-center">
@@ -150,8 +161,10 @@
                         <div class="col-sm-9">
                             <select required title="Select a reason" class="form-control" name="type_id">
                                 <?php
-                                $chapter_reasons = array_filter($templateVar['report_reasons'], function($reason) { return REPORT_TYPES[$reason['type_id']] === 'Chapter'; });
-                                foreach ($chapter_reasons as $reason): ?>
+                                $chapter_reasons = array_filter($templateVar['report_reasons'], function ($reason) {
+                                    return REPORT_TYPES[$reason['type_id']] === 'Chapter';
+                                });
+                                foreach ($chapter_reasons as $reason) : ?>
                                     <option value="<?= $reason['id'] ?>"><?= $reason['text'] ?><?= $reason['is_info_required'] ? ' *' : '' ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -245,6 +258,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Language-based chapter filtering</label>
+                        <div class="col">
+                            <div class="row">
+                                <button type="button" data-value="0" data-setting="restrictChLang" class="btn btn-default btn-secondary col px-2">Show all languages</button>
+                                <button type="button" data-value="1" data-setting="restrictChLang" class="btn btn-default btn-secondary col px-2">Hide other languages</button>
+                            </div>
+                        </div>
+                    </div>
                     <hr>
                     <h5><span class='fas fa-columns fa-fw' aria-hidden='true' title=''></span> Layout settings</h5>
                     <div class="form-group row">
@@ -279,6 +301,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Sidebar collapser style</label>
+                        <div class="col d-none d-lg-block">
+                            <div class="row">
+                                <button type="button" data-value="0" data-setting="collapserStyle" class="btn btn-default btn-secondary col px-2">Corner button</button>
+                                <button type="button" data-value="1" data-setting="collapserStyle" class="btn btn-default btn-secondary col px-2">On-hover bar</button>
+                            </div>
+                        </div>
+                        <div class="col d-lg-none">
+                            <div class="row">
+                                <button type="button" disabled class="btn btn-default btn-secondary col px-2">Hidden on the mobile layout</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row advanced">
                         <label class="col-sm-4 col-form-label">Chapter dropdown titles</label>
                         <div class="col">
@@ -290,6 +326,15 @@
                     </div>
                     <hr>
                     <h5><span class='fas fa-hand-pointer fa-fw' aria-hidden='true' title=''></span> Input settings</h5>
+                    <div class="row form-group">
+                        <label class="col-sm-4 col-form-label">Hide cursor over images</label>
+                        <div class="col">
+                            <div class="row">
+                                <button type="button" data-value="1" data-setting="hideCursor" class="btn btn-default btn-secondary col px-2">Enabled</button>
+                                <button type="button" data-value="0" data-setting="hideCursor" class="btn btn-default btn-secondary col px-2">Disabled</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row form-group advanced">
                         <label class="col-sm-4 col-form-label">Tap/click target area</label>
                         <div class="col">
@@ -306,6 +351,15 @@
                                 <button type="button" data-value="1" data-setting="pageTapTurn" class="btn btn-default btn-secondary col px-2">Directional turn</button>
                                 <button type="button" data-value="2" data-setting="pageTapTurn" class="btn btn-default btn-secondary col px-2">Always turn forward</button>
                                 <button type="button" data-value="0" data-setting="pageTapTurn" class="btn btn-default btn-secondary col px-2">Disabled</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group advanced">
+                        <label class="col-sm-4 col-form-label">Turn page in long strip mode</label>
+                        <div class="col">
+                            <div class="row">
+                                <button type="button" data-value="1" data-setting="pageTurnLongStrip" class="btn btn-default btn-secondary col px-2">Enabled</button>
+                                <button type="button" data-value="0" data-setting="pageTurnLongStrip" class="btn btn-default btn-secondary col px-2">Disabled</button>
                             </div>
                         </div>
                     </div>
@@ -353,11 +407,14 @@
                     </div>
                     <hr>
                     <h5><span class='fas fa-folder-open fa-fw' aria-hidden='true' title=''></span> Other settings</h5>
-                    <div class="row form-group">
+                    <div class="row form-group mb-1">
                         <label class="col-sm-4 col-form-label">Preload images (0 to <span class="preload-max-value">5</span>)</label>
                         <div class="col px-0 my-auto">
-                            <input data-setting="preloadPages" class="form-control" type="number" min="0" max="5" placeholder="The amount of images (default: 3)">
+                            <input data-setting="preloadPages" class="form-control" type="number" min="0" max="5" placeholder="The amount of images">
                         </div>
+                    </div>
+                    <div class="row form-group text-right">
+                        <small class="col">Note: Chapters with images loaded via MD@H will always be fully preloaded.</small>
                     </div>
                     <div class="row form-group advanced">
                         <label class="col-sm-4 col-form-label">Preload this entire chapter</label>
@@ -389,15 +446,15 @@
                             </select>
                         </div>
                     </div>
-                  <div class="row form-group">
-                    <label class="col-sm-4 col-form-label">Data saver <a href="/thread/252554"><span class="fas fa-info-circle fa-fw" title="More information"></span></a></label>
-                      <div class="col">
-                          <div class="row">
-                            <button type="button" data-value="0" data-setting="dataSaver" class="btn btn-default btn-secondary col px-2">Original images</button>
-                            <button type="button" data-value="1" data-setting="dataSaver" class="btn btn-default btn-secondary col px-2">Compressed images</button>
-                          </div>
-                      </div>
-                  </div>
+                    <div class="row form-group">
+                        <label class="col-sm-4 col-form-label">Data saver <a href="/thread/252554"><span class="fas fa-info-circle fa-fw" title="More information"></span></a></label>
+                        <div class="col">
+                            <div class="row">
+                                <button type="button" data-value="0" data-setting="dataSaverV2" class="btn btn-default btn-secondary col px-2">Original images</button>
+                                <button type="button" data-value="1" data-setting="dataSaverV2" class="btn btn-default btn-secondary col px-2">Compressed images</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row form-group advanced">
                         <label class="col-sm-4 col-form-label">[BETA] Recommendations</label>
                         <div class="col">
@@ -413,7 +470,8 @@
                         <p>
                             <kbd>^</kbd> = shift key
                             <br>
-                            <kbd>^f</kbd> = shift + f</p>
+                            <kbd>^f</kbd> = shift + f
+                        </p>
                         <ul class="list-unstyled container">
                             <li class="row no-gutters">
                                 <div class="col-2 text-right">

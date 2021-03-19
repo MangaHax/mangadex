@@ -9,7 +9,7 @@ else {
 			FROM mangadex_chapters AS chapters
 			LEFT JOIN mangadex_mangas AS mangas
 				ON mangas.manga_id = chapters.manga_id
-			WHERE mangas.manga_hentai = 0 
+			WHERE mangas.manga_hentai = 0
 				AND chapters.chapter_deleted = 0
 				AND chapters.lang_id IN ($in)
 			", $lang_id_filter_array , 'fetchAll', PDO::FETCH_COLUMN, 86400);
@@ -35,11 +35,16 @@ $manga = new Manga($id);
 
 $relation_types = new Relation_Types(); // This is needed, otherwise it breaks manga.req.js
 
+$countryCode = strtoupper(get_country_code($user->last_ip));
+
 if (!isset($manga->manga_id)) {
     $page_html = parse_template('partials/alert', ['type' => 'danger', 'strong' => 'Warning', 'text' => "Manga #$id does not exist."]);
 }
 elseif (in_array($manga->manga_id, RESTRICTED_MANGA_IDS) && !validate_level($user, 'contributor') && $user->get_chapters_read_count() < MINIMUM_CHAPTERS_READ_FOR_RESTRICTED_MANGA) {
 	$page_html = parse_template('partials/alert', ['type' => 'danger', 'strong' => 'Warning', 'text' => "Manga #$id is not available. Contact staff on discord for more information."]);
+}
+elseif (isset(REGION_BLOCKED_MANGA[$countryCode]) && in_array($manga->manga_id, REGION_BLOCKED_MANGA[$countryCode]) && !validate_level($user, 'pr')) {
+    $page_html = parse_template('partials/alert', ['type' => 'danger', 'strong' => 'Warning', 'text' => "Manga #$id is not available."]);
 }
 else {
 
@@ -54,11 +59,11 @@ else {
         case 'chapters':
 
             $search['manga_id'] = $manga->manga_id;
-			
+
 			$blocked_groups = $user->get_blocked_groups();
 			if ($blocked_groups)
 				$search['blocked_groups'] = array_keys($blocked_groups);
-			
+
             //multi_lang
             if ($user->user_id && $user->default_lang_ids)
                 $search["multi_lang_id"] = $user->default_lang_ids;

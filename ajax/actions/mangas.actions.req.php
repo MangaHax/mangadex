@@ -738,6 +738,25 @@ switch ($function) {
 		$result = (!is_numeric($details)) ? 0 : 1;
 		break;
 
+	case "manga_regenerate_thumb":
+		$id = prepare_numeric($_GET['id']);
+
+		if (validate_level($user, 'mod')) {
+			$manga = new Manga($id);
+			$ext = strtolower($manga->manga_image);
+
+			generate_thumbnail(ABS_DATA_BASEPATH . "/manga/$manga->manga_id.$ext", 1);
+
+            $details = $id;
+		}
+		else {
+			$details = "You can't regenerate this thumbnail.";
+			print display_alert('danger', 'Failed', $details); //fail
+		}
+
+		$result = (!is_numeric($details)) ? 0 : 1;
+		break;
+
 	case "manga_report":
 		$id = prepare_numeric($_GET['id']);
 		$report_text = htmlentities($_POST["report_text"]);

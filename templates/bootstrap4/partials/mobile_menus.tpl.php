@@ -33,6 +33,7 @@ $friend_requests = count($templateVar['user']->get_pending_friends_user_ids());
 							<?php else : ?>
 								<?= validate_level($templateVar['user'], 'admin') ? "<a class='dropdown-item' href='/admin'>" . display_fa_icon('user-md') . " Admin</a>" : "" ?>
 								<?= validate_level($templateVar['user'], 'mod') ? "<a class='dropdown-item' href='/mod'>" . display_fa_icon('user-md') . " Moderation</a>" : "" ?>
+                                <?= validate_level($templateVar['user'], 'pr') ? "<a class='dropdown-item' href='/pr'>" . display_fa_icon('user-md') . " Public Relations</a>" : "" ?>
 
 								<?= validate_level($templateVar['user'], 'mod') ? "<div class='dropdown-divider'></div>" : "" ?>
 
@@ -61,17 +62,23 @@ $friend_requests = count($templateVar['user']->get_pending_friends_user_ids());
 						</div>
 					</div>
 
-					<?php if (validate_level($templateVar['user'], 'gmod') && $templateVar['report_count']['chapter_reports'] + $templateVar['report_count']['manga_reports'] > 0) : ?>
-						<a class="nav-link ml-auto px-2" href="/mod/<?=$templateVar['report_count']['chapter_reports'] > 0 ? 'chapter_reports' : 'manga_reports'?>/new" title="Pending Reports">
-							<span class="badge badge-warning"><?=$templateVar['report_count']['manga_reports'] + $templateVar['report_count']['chapter_reports']?></span>
+                    <?php if (validate_level($templateVar['user'], 'gmod') && $templateVar['report_count']['chapter_reports'] + $templateVar['report_count']['manga_reports'] > 0) : ?>
+                        <a class="nav-link ml-auto px-1" href="/mod/<?=$templateVar['report_count']['chapter_reports'] > 0 ? 'chapter_reports' : 'manga_reports'?>/new" title="Pending Reports">
+                            <span class="badge badge-warning"><?= $templateVar['report_count']['manga_reports'] + $templateVar['report_count']['chapter_reports'] ?></span>
 						</a>
 					<?php endif; ?>
 
 					<?php if (validate_level($templateVar['user'], 'mod') && $templateVar['general_report_count'] > 0) : ?>
-						<a class="nav-link px-2" href="/mod/reports?state=0" title="Pending Reports"><span class="badge badge-primary">
-							<?= $templateVar['general_report_count']?></span>
+						<a class="nav-link px-1" href="/mod/reports?state=0" title="Pending Reports">
+                            <span class="badge badge-primary"><?= $templateVar['general_report_count'] ?></span>
 						</a>
 					<?php endif; ?>
+
+                    <?php if (validate_level($templateVar['user'], 'mod') && $templateVar['upload_queue_count'] > 0) : ?>
+                        <a class="nav-link px-1" href="/mod/upload_queue" title="Upload Queue">
+                            <span class="badge badge-success"><?= $templateVar['upload_queue_count'] ?></span>
+                        </a>
+                    <?php endif; ?>
 
 					<?php if (!$templateVar['user']->user_id) : ?>
 						<button class="navbar-toggler ml-auto" type="button">
@@ -122,7 +129,7 @@ $friend_requests = count($templateVar['user']->get_pending_friends_user_ids());
 						<a class="dropdown-item <?= display_active($_GET['page'], ['rules']) ?>" href="/rules"><?= display_fa_icon('list', 'Rules') ?> Rules</a>
 						<a class="dropdown-item <?= display_active($_GET['page'], ['about']) ?>" href="/about"><?= display_fa_icon('info', 'About') ?> About</a>
 						<a class="dropdown-item <?= display_active($_GET['page'], ['changelog']) ?>" href="/changelog"><?= display_fa_icon('code', 'Change log') ?> Change log</a>
-						<a class="dropdown-item <?= display_active($_GET['page'], ['affiliates']) ?>" href="/affiliates"><?= display_fa_icon('handshake', 'Affiliates', '', 'far') ?> Affiliates</a>
+						<a class="dropdown-item <?= display_active($_GET['page'], ['/support/affiliates']) ?>" href="/support/affiliates"><?= display_fa_icon('handshake', 'Affiliates', '', 'far') ?> Affiliates</a>
                         <a class="dropdown-item <?= display_active($_GET['page'], ['tutorial']) ?>" href="/title/30461/bocchi-sensei-teach-me-mangadex"><?= display_fa_icon('question', 'Tutorial') ?> Tutorial</a>
 					</div>
 				</div>

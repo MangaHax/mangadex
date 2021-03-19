@@ -397,6 +397,8 @@ $(".mass_edit_delete_button").click(function(event){
 
 <?= jquery_get("manga_unlock", $id, '', "Unlock", "Unlocking", "You have unlocked this manga.", "location.reload();") ?>
 
+<?= jquery_get("manga_regenerate_thumb", $id, '', "Regenerate thumb", "Regenerating thumb", "You have regenerated the thumbnail.", "location.reload();") ?>
+
 <?php } ?>
 
 <?php if (validate_level($user, 'gmod')) { ?>

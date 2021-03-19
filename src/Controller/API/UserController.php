@@ -24,12 +24,26 @@ class UserController extends APIController
         return $id == $this->user->user_id || ($level !== null && validate_level($this->user, $level));
     }
 
+    protected function isAuthorizedUserForMangaList($targetUser, $level)
+    {
+        if ($this->isAuthorizedUser($targetUser->user_id, $level)) {
+            return true;
+        } else if ($targetUser->list_privacy === 1) {
+            return true;
+        } else if ($targetUser->list_privacy === 2) {
+            $friends = $targetUser->get_friends_user_ids();
+            if ($friends[$this->user->user_id]['accepted'] ?? false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function view($path)
     {
-        /**
-         * @param array{0: int|string, 1: string|null, 2: int|string|mixed|null} $path
-         */
-        [$id, $subResource, $subResourceId] = $path;
+        $id = $path[0] ?? null;
+        $subResource = $path[1] ?? null;
+        $subResourceId = $path[2] ?? null;
 
         $id = $this->validateId($id);
 
@@ -38,7 +52,8 @@ class UserController extends APIController
                 $this->fetch($id); // check if exists
                 return (new ChapterController())->fetchForUser($id);
             case 'followed-manga':
-                if (!$this->isAuthorizedUser($id)) {
+                $user = $this->fetch($id);
+                if (!$this->isAuthorizedUserForMangaList($user, 'mod')) {
                     throw new ForbiddenHttpException();
                 }
                 return $this->fetchFollowedManga($id);
@@ -123,10 +138,13 @@ class UserController extends APIController
         return [
             'userId' => $userId,
             'mangaId' => $data['manga_id'],
+            'mangaTitle' => $data['title'],
+            'isHentai' => (bool) $data['manga_hentai'],
             'followType' => $data['follow_type'],
             'volume' => $data['volume'],
             'chapter' => $data['chapter'],
             'rating' => $data['rating'] ?: null,
+            'mainCover' => $data['manga_image'] ? $this->getFileUrl("/images/manga/{$data['manga_id']}.{$data['manga_image']}") : null,
         ];
     }
 
@@ -134,9 +152,21 @@ class UserController extends APIController
     {
         $userResource = $this->fetch($id);
         $follows = $userResource->get_followed_manga_ids_api();
-        return array_map(function ($data) use ($id) {
+        if ($this->request->query->has('type')) {
+            $type = $this->request->query->getInt('type');
+            $follows = array_filter($follows, function ($m) use ($type) {
+                return $m['follow_type'] === $type;
+            });
+        }
+        $hentai = $this->request->query->getInt('hentai', 0);
+        if ($hentai !== 1) {
+            $follows = array_filter($follows, function ($m) use ($hentai) {
+                return $m['manga_hentai'] === 0 && $hentai === 0 || $m['manga_hentai'] === 1 && $hentai === 2;
+            });
+        }
+        return array_values(array_map(function ($data) use ($id) {
             return $this->normalizeMangaUserData($id, $data);
-        }, $follows);
+        }, $follows));
     }
 
     public function fetchFollowedUpdates($id)
@@ -148,7 +178,7 @@ class UserController extends APIController
     public function fetchMangaUserData($id, $mangaId)
     {
         $userResource = $this->fetch($id);
-        $data = $userResource->get_manga_userdata($mangaId)[0] ?? null;
+        $data = $userResource->get_manga_userdata($mangaId) ?? null;
         if ($data === null) {
             throw new NotFoundHttpException("Manga not found.");
         }
@@ -171,20 +201,28 @@ class UserController extends APIController
     public function fetchSettings($id)
     {
         $user = $this->fetch($id);
+        $langIds = explode(',', $user->default_lang_ids ?? '');
+        $exludedTags = explode(',', $user->excluded_genres ?? '');
         return [
             'id' => $user->user_id,
             'hentaiMode' => $user->hentai_mode,
             'latestUpdates' => $user->latest_updates,
             'showModeratedPosts' => (bool)$user->display_moderated,
             'showUnavailableChapters' => (bool)$user->show_unavailable,
-            'shownChapterLangs' => explode(',', $user->default_lang_ids ?: ''),
-            'excludedTags' => explode(',', $user->excluded_genres ?: ''),
+            'shownChapterLangs' => array_map(function ($id) {
+                return ['id' => $id];
+            }, $langIds),
+            'excludedTags' => array_map(function ($id) {
+                return ['id' => (int)$id];
+            }, $exludedTags),
         ];
     }
 
     public function create($path)
     {
-        [$id, $subResource, $subResourceId] = $path;
+        $id = $path[0] ?? null;
+        $subResource = $path[1] ?? null;
+        $subResourceId = $path[2] ?? null;
 
         $id = $this->validateId($id);
         $content = $this->decodeJSONContent();

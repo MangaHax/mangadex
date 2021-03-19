@@ -11,6 +11,7 @@ use Mangadex\Controller\API\MangaController;
 use Mangadex\Controller\API\RelationTypeController;
 use Mangadex\Controller\API\TagController;
 use Mangadex\Controller\API\UserController;
+use Mangadex\Controller\API\HighestChapterIDController;
 use Mangadex\Exception\Http\HttpException;
 use Mangadex\Exception\Http\NotFoundHttpException;
 use Mangadex\Exception\Http\TooManyRequestsHttpException;
@@ -66,6 +67,9 @@ try {
             break;
         case 'index':
             $controller = new IndexController();
+            break;
+        case 'highest_chapter_id':
+            $controller = new HighestChapterIDController();
             break;
         default:
             throw new NotFoundHttpException("Invalid endpoint");

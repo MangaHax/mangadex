@@ -1,2 +1,0 @@
-<p>MangaDex are currently funded by AniDex's other projects, such as selling seedboxes.</p>
-<p>When the site gets more popular in future, we will explore alternative methods of funding, such as accepting donations and patreon. Ads may be considered as a last resort. </p>

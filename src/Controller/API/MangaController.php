@@ -8,10 +8,9 @@ class MangaController extends APIController
 {
     public function view($path)
     {
-        /**
-         * @param array{0: int|string, 1: string|null, 2: int|string|mixed|null} $path
-         */
-        [$id, $subResource, $subResourceId] = $path;
+        $id = $path[0] ?? null;
+        $subResource = $path[1] ?? null;
+        $subResourceId = $path[2] ?? null;
 
         $id = $this->validateId($id);
 
@@ -45,20 +44,22 @@ class MangaController extends APIController
         return $manga;
     }
 
-    private function normalize($manga)
+    public function normalize($manga)
     {
-        $coverPath = "/images/manga/$manga->manga_id.$manga->manga_image";
-
         $normalized = [
             //'type' => 'manga',
             'id' => $manga->manga_id,
             'title' => $manga->manga_name,
             'altTitles' => array_map(function ($alt_name) {
-                return \html_entity_decode($alt_name);
+                return trim(\html_entity_decode($alt_name));
             }, $manga->get_manga_alt_names()),
             'description' => $manga->manga_description,
-            'artist' => explode(',', $manga->manga_artist),
-            'author' => explode(',', $manga->manga_author),
+            'artist' => array_map(function ($a) {
+                return trim($a);
+            }, explode(',', $manga->manga_artist)),
+            'author' => array_map(function ($a) {
+                return trim($a);
+            }, explode(',', $manga->manga_author)),
             'publication' => [
                 'language' => $manga->lang_flag,
                 'status' => $manga->manga_status_id,
@@ -74,7 +75,7 @@ class MangaController extends APIController
                     'id' => $relation['related_manga_id'],
                     'title' => $relation['manga_name'],
                     'type' => $relation['relation_id'],
-                    'isHentai' => (bool)$relation['hentai'],
+                    'isHentai' => (bool)$relation['manga_hentai'],
                 ];
             }, $manga->get_related_manga()),
             'rating' => [
